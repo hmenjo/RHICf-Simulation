@@ -100,6 +100,10 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
 
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
+  if(flag.check(bBEAMTEST)) {
+    RHICfForwardSD* ForwardSD = new RHICfForwardSD("Forward");
+    SDman->AddNewDetector(ForwardSD);
+  }
   if(flag.check(bGENERATE)) {
     RHICfCentralSD* CentralSD = new RHICfCentralSD("Central");
     SDman->AddNewDetector(CentralSD);
@@ -107,7 +111,7 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     if(flag.check(bTRANSPORT))
       CentralSD->SetCuts(etacut, ecut, opposite);
   }
-  if(flag.check(bTRANSPORT) || flag.check(bBEAMTEST)) {
+  if(flag.check(bTRANSPORT)) {
     RHICfForwardSD* ForwardSD = new RHICfForwardSD("Forward");
     SDman->AddNewDetector(ForwardSD);
   }

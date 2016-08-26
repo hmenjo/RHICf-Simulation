@@ -38,8 +38,10 @@ RHICfEventAction::~RHICfEventAction()
 /// BeginOfEventAction
 void RHICfEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  G4cout << "-------------------------------------" << G4endl;
-  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+  if(evt->GetEventID()%10==0) {
+    G4cout << "-------------------------------------" << G4endl;
+    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+  }
 }
 
 //////////
@@ -102,7 +104,7 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 
   /// Forward
   if(flag.check(bTRANSPORT)) {
-    G4cout << "Forward" << G4endl;
+    //    G4cout << "Forward" << G4endl;
     ForwardContainer* forwardCont=new ForwardContainer();
     forwardCont->Clear();
 
@@ -137,8 +139,6 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 
       forward->SetIsBackground((*ForwardHC)[i]->GetisBackground());
 
-      G4cout << tmp3.x() << " " << tmp3.y() << G4endl;
-
       forwardCont->Push_back(forward);
     }
     simEvent->SetForward(forwardCont);
@@ -149,6 +149,44 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     }
   }
 
+  /// BeamTest (Beam information)
+  if(flag.check(bBEAMTEST)) {
+    //    G4cout << "Forward" << G4endl;
+    ForwardContainer* forwardCont=new ForwardContainer();
+    forwardCont->Clear();
+
+    static G4int idforward=-1;
+    if(idforward<0) idforward=SDManager->GetCollectionID("Forward");
+    ForwardHitsCollection* ForwardHC=(ForwardHitsCollection*)HCTE->GetHC(idforward);
+    for(unsigned int i=0; i<ForwardHC->GetSize(); i++) {
+      Forward* forward=new Forward();
+      forward->SetID((*ForwardHC)[i]->GetTrackID());
+      forward->SetMotherID(0);
+      forward->SetPDGcode((*ForwardHC)[i]->GetPDGCode());
+      G4ThreeVector mom3=(*ForwardHC)[i]->GetDirection();
+      double ekin=(*ForwardHC)[i]->GetEkinetic();
+      TLorentzVector tmp4;
+      tmp4.SetPx(ekin*mom3.x()/CLHEP::GeV);
+      tmp4.SetPy(ekin*mom3.y()/CLHEP::GeV);
+      tmp4.SetPz(ekin*mom3.z()/CLHEP::GeV);
+      tmp4.SetE((*ForwardHC)[i]->GetEnergy()/CLHEP::GeV);
+      forward->SetMomentum(tmp4);
+      TVector3 tmp3;
+      tmp3.SetX((*ForwardHC)[i]->GetPosition().x());
+      tmp3.SetY((*ForwardHC)[i]->GetPosition().y());
+      tmp3.SetZ((*ForwardHC)[i]->GetPosition().z());
+      forward->SetPosition(tmp3);
+
+      forward->SetIsBackground(false);
+
+      if(0)
+	G4cout << "Hit: " << tmp3.x() << " " << tmp3.y() << G4endl;
+
+      forwardCont->Push_back(forward);
+    }
+    simEvent->SetForward(forwardCont);
+  }
+
   /// ZDC
   if(flag.check(bRESPONSE_ZDC)) {
     ZDCContainer* zdcCont=new ZDCContainer();
@@ -157,13 +195,14 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     static G4int idzdc=-1;
     if(idzdc<0) idzdc=SDManager->GetCollectionID("ZDC");
     ZDCHitsCollection* ZDCHC=(ZDCHitsCollection*)HCTE->GetHC(idzdc);
-    G4cout << "ZDC " << G4endl;
+    //    G4cout << "ZDC " << G4endl;
     for(unsigned int i=0; i<ZDCHC->GetSize(); i++) {
       zdcCont->SetZDC((*ZDCHC)[i]->GetModule(),
       		      (*ZDCHC)[i]->GetEdep());
       zdcCont->SetNphoton((*ZDCHC)[i]->GetModule(),
 			  (*ZDCHC)[i]->GetNphoton());
-      if((*ZDCHC)[i]->GetEdep()>0)
+      //      if((*ZDCHC)[i]->GetEdep()>0)
+      if(0)
 	G4cout << (*ZDCHC)[i]->GetModule() << " " 
 	       << (*ZDCHC)[i]->GetEdep() << " " 
 	       << (*ZDCHC)[i]->GetNphoton() << " "
@@ -189,7 +228,7 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 
     runAction->SetSimEvent(simEvent);
 
-    if(!flag.check(bTRANSPORT)) {
+    if(!flag.check(bTRANSPORT) && !flag.check(bBEAMTEST)) {
       RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
       simEvent->SetCentral(genAction->GetCentral());
       simEvent->SetForward(genAction->GetForward());
@@ -204,7 +243,7 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     static G4int idplate=-1;
     if(idplate<0) idplate=SDManager->GetCollectionID("GSOplate");
     GSOplateHitsCollection* GSOplateHC=(GSOplateHitsCollection*)HCTE->GetHC(idplate);
-    G4cout << "GSOplate " << G4endl;
+    //    G4cout << "GSOplate " << G4endl;
     for(unsigned int i=0; i<GSOplateHC->GetSize(); i++) {
       mcdataCont->SetPlate((*GSOplateHC)[i]->GetTower(),
 			   (*GSOplateHC)[i]->GetPlate(),
@@ -212,7 +251,8 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
       mcdataCont->SetPlateTruth((*GSOplateHC)[i]->GetTower(),
 				(*GSOplateHC)[i]->GetPlate(),
 				(*GSOplateHC)[i]->GetEdep_truth());
-      if((*GSOplateHC)[i]->GetEdep()>0)
+      //      if((*GSOplateHC)[i]->GetEdep()>0)
+      if(0)
 	G4cout << (*GSOplateHC)[i]->GetTower() << " "
 	       << (*GSOplateHC)[i]->GetPlate() << " "
 	       << (*GSOplateHC)[i]->GetEdep() << " "
@@ -224,7 +264,7 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     static G4int idbar=-1;
     if(idbar<0) idbar=SDManager->GetCollectionID("GSObar");
     GSObarHitsCollection* GSObarHC=(GSObarHitsCollection*)HCTE->GetHC(idbar);
-    G4cout << "GSObar " << G4endl;
+    //    G4cout << "GSObar " << G4endl;
     for(unsigned int i=0; i<GSObarHC->GetSize(); i++) {
       mcdataCont->SetBarTruth((*GSObarHC)[i]->GetTower(),
 			      (*GSObarHC)[i]->GetBelt(),
@@ -232,7 +272,8 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 			      (*GSObarHC)[i]->GetBar(),
 			      (*GSObarHC)[i]->GetEdep(),
 			      (*GSObarHC)[i]->GetEdep_truth());
-      if((*GSObarHC)[i]->GetEdep()>0)
+      //      if((*GSObarHC)[i]->GetEdep()>0)
+      if(0)
 	G4cout << (*GSObarHC)[i]->GetTower() << " "
 	       << (*GSObarHC)[i]->GetBelt() << " "
 	       << (*GSObarHC)[i]->GetXY() << " "

@@ -135,7 +135,7 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	yy=gRandom->Uniform(-70,150);
       }
 
-      position=G4ThreeVector(xx, yy, -10.*CLHEP::mm);
+      position=G4ThreeVector(xx, yy, -10.*CLHEP::cm);
 
       particleGun=new G4ParticleGun(1);
       dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleDefinition(beam);

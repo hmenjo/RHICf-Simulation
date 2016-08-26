@@ -42,15 +42,20 @@ void RHICfForwardSD::Initialize(G4HCofThisEvent* HCTE)
 G4bool RHICfForwardSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 {
   G4Track* track=astep->GetTrack();
-  /// Get step information from "PreStepPoint"
 
+  /// Get step information from "PreStepPoint"
   const G4StepPoint* preStepPoint=astep->GetPreStepPoint();
   const G4StepPoint* postStepPoint=astep->GetPostStepPoint();
   G4VPhysicalVolume* postPV=postStepPoint->GetPhysicalVolume();
-  G4ThreeVector global=postStepPoint->GetPosition();
+
+  G4ThreeVector global1=preStepPoint->GetPosition();
+  G4ThreeVector global2=postStepPoint->GetPosition();
   G4TouchableHistory* touchable=(G4TouchableHistory*)(preStepPoint->GetTouchable());
   const G4AffineTransform transform=touchable->GetHistory()->GetTopTransform();
-  G4ThreeVector local=transform.TransformPoint(global);
+  G4ThreeVector local1=transform.TransformPoint(global1);
+  G4ThreeVector local2=transform.TransformPoint(global2);
+  if(local2.z()-local1.z()<0) return true;
+
 
   RHICfForwardHit* ahit=new RHICfForwardHit();
 
