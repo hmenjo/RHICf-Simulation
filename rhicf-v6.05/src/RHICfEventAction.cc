@@ -222,11 +222,11 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     if(idscin<0) idscin=SDManager->GetCollectionID("Scin");
     ScinHitsCollection* ScinHC=(ScinHitsCollection*)HCTE->GetHC(idscin);
     for(unsigned int i=0; i<ScinHC->GetSize(); i++) {
-      zdcCont->SetZDC((*ScinHC)[i]->GetScin(),
-		      (*ScinHC)[i]->GetEdep());
+      zdcCont->SetScin((*ScinHC)[i]->GetScin(),
+		       (*ScinHC)[i]->GetEdep());
     }
 
-    runAction->SetSimEvent(simEvent);
+    simEvent->SetZDC(zdcCont);
 
     if(!flag.check(bTRANSPORT) && !flag.check(bBEAMTEST)) {
       RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
@@ -293,5 +293,6 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     simEvent->SetMC(mcdataCont);
   }
 
+  runAction->SetSimEvent(simEvent);
   tevent->Fill();
 }
