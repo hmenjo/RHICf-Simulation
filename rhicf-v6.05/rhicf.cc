@@ -174,16 +174,6 @@ int main(int argc,char** argv)
   if(!findmode)
     G4Exception("rhicf","Invalid flag",FatalException,(mode + " is not available.").c_str());
 
-  if(0) {
-    G4cout << "Input options check1" << G4endl;
-    G4cout << "FULL:          " << flag.equal(bFULL)          << G4endl;
-    G4cout << "GENERATE:      " << flag.check(bGENERATE)      << G4endl;
-    G4cout << "TRANSPORT:     " << flag.check(bTRANSPORT)     << G4endl;
-    G4cout << "RESPONSE_ARM1: " << flag.check(bRESPONSE_ARM1) << G4endl;
-    G4cout << "RESPONSE_ZDC:  " << flag.check(bRESPONSE_ZDC)  << G4endl;
-    G4cout << "BEAMTEST:      " << flag.check(bBEAMTEST)      << G4endl;
-  }
-
 
   /// Set tables
   if(!fs::exists(ftables)) {
@@ -224,20 +214,16 @@ int main(int argc,char** argv)
   G4UserStackingAction* stackAction=new RHICfStackingAction();
   runManager->SetUserAction(stackAction);
 
-
-
   TFile *fin;
   fs::path finput;
   int seed1;
   int seed2;
   std::string fmodel;
   Flag flag_original; flag_original.reset(bALL);
-  if(!flag.equal(bFULL) && 
+  if(!flag.equal(bFULL) && !flag.check(bBEAMTEST) &&
      flag.check(bTRANSPORT|bRESPONSE_ARM1|bRESPONSE_ZDC)) {
     try{
       finput=vm["INPUTFILE"].as<fs::path>();
-      seed1=vm["SEED1"].as<int>();
-      seed2=vm["SEED2"].as<int>();
       fin=new TFile(finput.string().c_str());
       TTree *tin=(TTree*)fin->Get("RunInfo");
 
@@ -283,6 +269,7 @@ int main(int argc,char** argv)
 
   /// Set seed for Geant4
   if(flag.check(bGENERATE) || flag.check(bBEAMTEST)) {
+    seed1=vm["SEED1"].as<int>();
     CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
     if(seed1<0) {
       /// Get time in milliseconds
@@ -335,7 +322,10 @@ int main(int argc,char** argv)
   dynamic_cast<RHICfRunAction*>(runAction)->SetRunNumber(nrun);
   dynamic_cast<RHICfRunAction*>(runAction)->SetModel(fmodel);
   dynamic_cast<RHICfRunAction*>(runAction)->SetOutput(foutput.string());
-  if(flag.equal(bFULL)) {
+ if(flag.check(bBEAMTEST)) {
+    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("BeamTest");
+    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetBeam(bParticle,bEnergy*CLHEP::GeV,bPosition,DetPosition);
+  }else if(flag.equal(bFULL)) {
     dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("Generate");
     dynamic_cast<RHICfRunAction*>(runAction)->SetCRMCpath(fcrmc.string());
   }else if(flag.check(bGENERATE)) {
@@ -348,9 +338,6 @@ int main(int argc,char** argv)
   }else if(flag.check(bRESPONSE_ARM1) || flag.check(bRESPONSE_ZDC)) {
     dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("Response");
     dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetInput(fin);
-  }else if(flag.check(bBEAMTEST)) {
-    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("BeamTest");
-    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetBeam(bParticle,bEnergy*CLHEP::GeV,bPosition,DetPosition);
   }else{
     G4Exception("rhicf","Invalid flag",FatalException,"Not available.");
   }
