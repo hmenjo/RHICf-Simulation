@@ -15,10 +15,10 @@ static const int nsmd[nxy]={8,7};
 static const int nscin=2;
 
 static const int nside=2;
-static const int nbbc[nside]={36,36};
+static const int nbbc=36;
 
-static const int nstation[nside]={4,4};
-static const double pstation[4]={15.8e3,17.1e3,55.5e3,58.5e3};
+static const int nstation=4;
+static const double pstation[nstation]={15.8e3,17.1e3,55.5e3,58.5e3};
 
 enum FLAGS
   {

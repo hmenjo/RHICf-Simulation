@@ -16,7 +16,6 @@ G4Allocator<RHICfForwardHit> RHICfForwardHitAllocator;
 /// Constructor and Destructor
 RHICfForwardHit::RHICfForwardHit()
 {
-  TrackID=0;
   MotherID=0;
   PDGCode=0;
   Energy=0;

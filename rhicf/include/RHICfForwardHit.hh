@@ -24,8 +24,6 @@ public:
   void operator delete(void* aHit);
   
   /// set/get functions
-  void SetTrackID(G4int aTrackID) {TrackID=aTrackID;};
-  G4int GetTrackID() const {return TrackID;};
   void SetMotherID(G4int aMotherID) {MotherID=aMotherID;};
   G4int GetMotherID() const {return MotherID;};
   void SetPDGCode(G4int aPDGCode) {PDGCode=aPDGCode;};
@@ -46,7 +44,6 @@ public:
   virtual void Print();
 
 private:
-  G4int TrackID;
   G4int MotherID;
   G4int PDGCode;
   G4double Energy;
@@ -60,7 +57,6 @@ private:
 /// inline functions
 inline RHICfForwardHit::RHICfForwardHit(const RHICfForwardHit& right): G4VHit()
 {
-  TrackID=right.TrackID;
   MotherID=right.MotherID;
   PDGCode=right.PDGCode;
   Energy=right.Energy;
@@ -72,7 +68,6 @@ inline RHICfForwardHit::RHICfForwardHit(const RHICfForwardHit& right): G4VHit()
 
 inline const RHICfForwardHit& RHICfForwardHit::operator=(const RHICfForwardHit& right)
 {
-  TrackID=right.TrackID;
   MotherID=right.MotherID;
   PDGCode=right.PDGCode;
   Energy=right.Energy;

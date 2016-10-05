@@ -65,6 +65,8 @@ HepMC::GenEvent* HepMCG4AsciiReader::GenerateHepMCEvent()
   HepMC::GenEvent* evt= asciiInput-> read_next_event();
   if(!evt) return 0; // no more event
 
+  gprocess=evt->signal_process_id();
+
   if(verbose>0) evt-> print();
 
   return evt;

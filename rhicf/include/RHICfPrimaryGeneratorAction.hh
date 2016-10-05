@@ -37,8 +37,12 @@ public:
   ForwardContainer* GetForward() {return forwardCont;};
   std::multimap<G4int, G4int> GetCentralID() {return CentralID;};
 
+  G4int GetProcess() {return gprocess;};
+
   void SetCuts(G4double aetacut, G4double aecut, bool aopposite);
   bool CheckHit(G4double x, G4double y, G4String phit);
+
+  Forward* GetBeam() {return BeamInfo;};
 
 private:
   G4VPrimaryGenerator* particleGun;
@@ -57,6 +61,8 @@ private:
   ForwardContainer *forwardCont;
   std::multimap<G4int, G4int> CentralID; // 1st: New TrackID; 2nd: Original TrackID
 
+  G4int gprocess;
+
   G4double etacut;
   G4double ecut;
   bool opposite;
@@ -65,6 +71,8 @@ private:
   G4double bEnergy;
   G4String bPosition;
   G4double DetPosition;
+
+  Forward* BeamInfo;
 
   RHICfPrimaryGeneratorMessenger* messenger;
 };

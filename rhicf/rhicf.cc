@@ -89,7 +89,7 @@ int main(int argc,char** argv)
   opt3.add_options()
     ("ETACUT", value<double>()->default_value(4.8), "Rapidity cut")
     ("ECUT", value<double>()->default_value(0.5), "Energy cut in GeV")
-    ("OPPOSITE", value<std::string>()->default_value("FALSE"), "Simulate particles in eta<0");
+    ("OPPOSITE", value<std::string>()->default_value("FALSE"), "If true, simulate particles in eta<0");
   options_description opt4("For Transport/Response mode");
   opt4.add_options()
     ("INPUTFILE", value<fs::path>(), "Input file");
@@ -174,6 +174,16 @@ int main(int argc,char** argv)
   if(!findmode)
     G4Exception("rhicf","Invalid flag",FatalException,(mode + " is not available.").c_str());
 
+  if(0) {
+    G4cout << "Input options check1" << G4endl;
+    G4cout << "FULL:          " << flag.equal(bFULL)          << G4endl;
+    G4cout << "GENERATE:      " << flag.check(bGENERATE)      << G4endl;
+    G4cout << "TRANSPORT:     " << flag.check(bTRANSPORT)     << G4endl;
+    G4cout << "RESPONSE_ARM1: " << flag.check(bRESPONSE_ARM1) << G4endl;
+    G4cout << "RESPONSE_ZDC:  " << flag.check(bRESPONSE_ZDC)  << G4endl;
+    G4cout << "BEAMTEST:      " << flag.check(bBEAMTEST)      << G4endl;
+  }
+
 
   /// Set tables
   if(!fs::exists(ftables)) {
@@ -182,7 +192,7 @@ int main(int argc,char** argv)
   }
 
   /// Prepare output file
-  if(!fs::exists(foutput.branch_path())) {
+  if(foutput.branch_path()!="" && !fs::exists(foutput.branch_path())) {
     boost::system::error_code error;
     const bool result=fs::create_directories(foutput.branch_path(), error);
     if(!result || error) {
@@ -220,6 +230,7 @@ int main(int argc,char** argv)
   int seed2;
   std::string fmodel;
   Flag flag_original; flag_original.reset(bALL);
+  double sigTot, sigEla, sigIne;
   if(!flag.equal(bFULL) && !flag.check(bBEAMTEST) &&
      flag.check(bTRANSPORT|bRESPONSE_ARM1|bRESPONSE_ZDC)) {
     try{
@@ -239,6 +250,9 @@ int main(int argc,char** argv)
       seed2=runInfo->GetSeed2();
       flag_original=runInfo->GetFlag();
       G4Random::setTheSeed(seed1);
+      sigTot=runInfo->GetSigTot();
+      sigEla=runInfo->GetSigEla();
+      sigIne=runInfo->GetSigIne();
     }catch(std::exception& ex) {
       G4cerr << finput.string() << " does not exist." << G4endl;
       if(flag.check(bTRANSPORT)) {

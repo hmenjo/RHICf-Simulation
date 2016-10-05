@@ -8,6 +8,9 @@ RunInfo::RunInfo()
   Seed1=-1;
   Seed2=-1;
   flag.set(0);
+  sigTot=0;
+  sigEla=0;
+  sigIne=0;
 }
 
 RunInfo::~RunInfo()
@@ -26,6 +29,12 @@ void RunInfo::SetSeed2(int aSeed2)
 { Seed2=aSeed2; }
 void RunInfo::SetFlag(Flag aflag)
 { flag=aflag; }
+void RunInfo::SetSigTot(double asigTot)
+{ sigTot=asigTot; }
+void RunInfo::SetSigEla(double asigEla)
+{ sigEla=asigEla; }
+void RunInfo::SetSigIne(double asigIne)
+{ sigIne=asigIne; }
 
 int RunInfo::GetRunNumber()
 { return RunNumber; }
@@ -39,3 +48,9 @@ int RunInfo::GetSeed2()
 { return Seed2; }
 Flag RunInfo::GetFlag()
 { return flag; }
+double RunInfo::GetSigTot()
+{ return sigTot; }
+double RunInfo::GetSigEla()
+{ return sigEla; }
+double RunInfo::GetSigIne()
+{ return sigIne; }

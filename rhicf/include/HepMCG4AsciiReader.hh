@@ -60,6 +60,10 @@ public:
 
   // methods...
   void Initialize();
+
+  G4int GetProcess() {return gprocess;};
+private:
+  G4int gprocess;
 };
 
 // ====================================================================

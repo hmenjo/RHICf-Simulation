@@ -56,9 +56,12 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4int ipart=0;
       for(unsigned int i=0; i<central.size(); i++) {
 	if(!central[i]->isBoundary()) continue;
-	if(!opposite && central[i]->GetMomentum().Eta()<0) continue;
-	if(central[i]->GetMomentum().E()<ecut)  continue; /// both in GeV
-	if(fabs(central[i]->GetMomentum().Eta())<etacut)   continue;
+	if(opposite) {
+	  if(fabs(central[i]->GetMomentum().Eta())<etacut) continue;
+	}else{
+	  if(central[i]->GetMomentum().Eta()<etacut)       continue;
+	}
+	if(central[i]->GetMomentum().E()<ecut) continue; /// both in GeV
 
 	particles.push_back(new G4ParticleGun());
 	part=G4ParticleTable::GetParticleTable()->FindParticle(central[i]->GetPDGcode());
@@ -142,9 +145,31 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       dynamic_cast<G4ParticleGun*>(particleGun)->SetParticlePosition(position);
       dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleMomentumDirection(direction);
       dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleEnergy(bEnergy);
+
+      /// Set Beam information
+      BeamInfo=new Forward();
+      BeamInfo->SetMotherID(0);
+      BeamInfo->SetPDGcode(dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleDefinition()->GetPDGEncoding());
+      TLorentzVector tmp4;
+      tmp4.SetPxPyPzE(dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentum()*
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().x(),
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentum()*
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().y(),
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentum()*
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().z(),
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleEnergy());
+      BeamInfo->SetMomentum(tmp4);
+      TVector3 tmp3;
+      tmp3.SetXYZ(dynamic_cast<G4ParticleGun*>(particleGun)->GetParticlePosition().x(),
+		  dynamic_cast<G4ParticleGun*>(particleGun)->GetParticlePosition().y(),
+		  dynamic_cast<G4ParticleGun*>(particleGun)->GetParticlePosition().z());
+      BeamInfo->SetPosition(tmp3);
+      BeamInfo->SetIsBackground(false);
+
       particleGun->GeneratePrimaryVertex(anEvent);
     }else if(currentGeneratorName=="Generate") {
       currentGenerator->GeneratePrimaryVertex(anEvent);
+      gprocess=dynamic_cast<HepMCG4AsciiReader*>(currentGenerator)->GetProcess();
     }
   }else
     G4Exception("RHICfPrimaryGeneratorAction::GeneratePrimaries",

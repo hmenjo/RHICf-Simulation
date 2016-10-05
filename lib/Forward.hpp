@@ -11,14 +11,12 @@ public:
   Forward();
   ~Forward();
 
-  void SetID(int aid);
   void SetMotherID(int amotherid);
   void SetPDGcode(int apdgcode);
   void SetMomentum(TLorentzVector amomentum);
   void SetPosition(TVector3 aposition);
   void SetIsBackground(bool abackground);
 
-  int GetID();
   int GetMotherID();
   int GetPDGcode();
   TLorentzVector GetMomentum();
@@ -26,7 +24,6 @@ public:
   bool IsBackground();
 
 private:
-  int id;
   int motherid;
   int pdgcode;
   TLorentzVector momentum;

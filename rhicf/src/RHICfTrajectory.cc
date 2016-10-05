@@ -128,7 +128,6 @@ const std::map<G4String,G4AttDef>* RHICfTrajectory::GetAttDefs() const
 
     G4String iproduction("Production");
     (*store)[ntp]=G4AttDef(iproduction,"Production","Bookkeeping","","G4String");
-
   }
   return store;
 }

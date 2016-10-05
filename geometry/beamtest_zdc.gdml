@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE gdml [ 
-<!ENTITY gwd>
+<!ENTITY gwd >
 <!ENTITY materials SYSTEM "materials.xml">
 ]>
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
@@ -13,7 +13,6 @@
 
     <position name="Pos-world" unit="cm" x="0" y="0" z="0"/>
     <position name="Pos-ZDC" unit="cm" x="0" y="1.162065" z="ZDCz+70"/>
-    <position name="Pos-Forward" unit="cm" x="0" y="0" z="0.01"/>
   </define>
 
   <!-- the content of the materials.xml file will be included here -->
@@ -23,25 +22,16 @@
   <!-- *** Logical Volumes *** -->
   <!-- *********************** -->
   <solids>
-    <box name="Log-world" lunit="m" x="2" y="2" z="200"/>
-    <box name="Log-Forward" lunit="cm" x="10" y="30" z="0.0001"/>  
+    <box name="Log-world" lunit="cm" x="20" y="80" z="500"/>
   </solids>
 
   <!-- ************************ -->
   <!-- *** Physical Volumes *** -->
   <!-- ************************ -->
   <structure>
-    <volume name="Vol-Forward">
-      <materialref ref="Air"/>
-      <solidref ref="Log-Forward"/>
-    </volume>
     <volume name="Vol-world">
       <materialref ref="Air"/>
       <solidref ref="Log-world"/>
-      <physvol>
-        <volumeref ref="Vol-Forward"/>
-	<positionref ref="Pos-Forward"/>
-      </physvol>
       <physvol>
         <file name="&gwd;zdc.gdml"/>
 	<positionref ref="Pos-ZDC"/>

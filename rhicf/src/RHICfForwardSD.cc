@@ -59,7 +59,6 @@ G4bool RHICfForwardSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 
   RHICfForwardHit* ahit=new RHICfForwardHit();
 
-  ahit->SetTrackID(track->GetTrackID());
   ahit->SetPDGCode(track->GetDynamicParticle()->GetPDGcode());
   ahit->SetEnergy(track->GetTotalEnergy());
   ahit->SetEkinetic(track->GetKineticEnergy());
@@ -79,20 +78,6 @@ G4bool RHICfForwardSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
     proc=track->GetCreatorProcess()->GetProcessName();
   isbkg=IsBackground(proc);
 
-    /*
-    if(motherID!=0)
-      G4cout << "Track " << std::setw(7) << track->GetTrackID()  << " ("
-	     << track->GetDefinition()->GetParticleName() << ") "
-	     << track->GetCreatorProcess()->GetProcessName()
-	     << G4endl;
-    else{
-      G4cout << "Track " << std::setw(7) << track->GetTrackID()  << " ("
-	     << track->GetDefinition()->GetParticleName() << ")   - Source"
-	     << std::setw(9) << std::fixed << std::setprecision(3) << track->GetKineticEnergy()/CLHEP::GeV << " / "
-	     << G4endl;
-
-    }
-    */
   while(motherID!=0) {
     tmp_motherID=motherID;
     RHICfTrajectory* parentTrajectory=GetParentTrajectory(motherID);
@@ -100,16 +85,6 @@ G4bool RHICfForwardSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
     proc=parentTrajectory->GetProduction();
     motherID=parentTrajectory->GetParentID();
     if(!isbkg) isbkg=IsBackground(proc);
-      /*
-      G4cout << std::setw(9) << parentTrajectory->GetTrackID() << " ("
-	     << std::setw(9) << parentTrajectory->GetParticleName() << ") "
-	     << std::setw(18) << proc << " "
-	     << std::setw(11) << std::fixed << std::setprecision(2) << parentTrajectory->GetPoint(0)->GetPosition().z()/CLHEP::cm << " ---> "
-	     << std::setw(11) << std::fixed << std::setprecision(2) << parentTrajectory->GetPoint(parentTrajectory->GetPointEntries()-1)->GetPosition().z()/CLHEP::cm
-	     << std::setw(9) << std::fixed << std::setprecision(3) << track->GetKineticEnergy()/CLHEP::GeV << " / "
-	     << std::setw(9) << std::fixed << std::setprecision(3) << parentTrajectory->GetInitialMomentum().mag()/CLHEP::GeV
-	     << G4endl;
-      */
   }
 
   ahit->SetMotherID(tmp_motherID);

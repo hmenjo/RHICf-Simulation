@@ -10,7 +10,6 @@
 #include "TLorentzVector.h"
 
 #include <fstream>
-#include <iostream>
 #include <iomanip>
 
 #include "RHICfEventAction.hh"
@@ -22,6 +21,7 @@
 #include "RHICfZDCSD.hh"
 #include "RHICfSMDSD.hh"
 #include "RHICfScinSD.hh"
+#include "RHICfBBCSD.hh"
 #include "RHICfPrimaryGeneratorAction.hh"
 
 //////////
@@ -71,6 +71,9 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     CentralContainer* centralCont=new CentralContainer();
     centralCont->Clear();
 
+    RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
+    centralCont->SetProcess(genAction->GetProcess());
+
     static G4int idcentral=-1;
     if(idcentral<0) idcentral=SDManager->GetCollectionID("Central");
     CentralHitsCollection* CentralHC=(CentralHitsCollection*)HCTE->GetHC(idcentral);
@@ -113,7 +116,6 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     ForwardHitsCollection* ForwardHC=(ForwardHitsCollection*)HCTE->GetHC(idforward);
     for(unsigned int i=0; i<ForwardHC->GetSize(); i++) {
       Forward* forward=new Forward();
-      forward->SetID((*ForwardHC)[i]->GetTrackID());
       if(flag.check(bGENERATE))
 	forward->SetMotherID((*ForwardHC)[i]->GetMotherID());
       else{
@@ -147,43 +149,40 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
       RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
       simEvent->SetCentral(genAction->GetCentral());
     }
+
+    /// BBC
+    BBCContainer* bbcCont=new BBCContainer();
+    bbcCont->Reset();
+
+    static G4int idbbc=-1;
+    if(idbbc<0) idbbc=SDManager->GetCollectionID("BBC");
+    BBCHitsCollection* BBCHC=(BBCHitsCollection*)HCTE->GetHC(idbbc);
+    
+    for(unsigned int i=0; i<BBCHC->GetSize(); i++) {
+      BBC* bbc=new BBC();
+      int iside=(*BBCHC)[i]->GetSide();
+      int ibbc=(*BBCHC)[i]->GetBBC();
+      bbc->SetEdep((*BBCHC)[i]->GetEdep());
+      bbc->SetHit((*BBCHC)[i]->GetHit());
+      bbcCont->SetBBC(iside, ibbc, bbc);
+    }
+    simEvent->SetBBC(bbcCont);
+
+    if(!flag.check(bGENERATE)) {
+      RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
+      simEvent->SetCentral(genAction->GetCentral());
+    }
   }
 
   /// BeamTest (Beam information)
   if(flag.check(bBEAMTEST)) {
-    //    G4cout << "Forward" << G4endl;
+    RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
     ForwardContainer* forwardCont=new ForwardContainer();
     forwardCont->Clear();
 
-    static G4int idforward=-1;
-    if(idforward<0) idforward=SDManager->GetCollectionID("Forward");
-    ForwardHitsCollection* ForwardHC=(ForwardHitsCollection*)HCTE->GetHC(idforward);
-    for(unsigned int i=0; i<ForwardHC->GetSize(); i++) {
-      Forward* forward=new Forward();
-      forward->SetID((*ForwardHC)[i]->GetTrackID());
-      forward->SetMotherID(0);
-      forward->SetPDGcode((*ForwardHC)[i]->GetPDGCode());
-      G4ThreeVector mom3=(*ForwardHC)[i]->GetDirection();
-      double ekin=(*ForwardHC)[i]->GetEkinetic();
-      TLorentzVector tmp4;
-      tmp4.SetPx(ekin*mom3.x()/CLHEP::GeV);
-      tmp4.SetPy(ekin*mom3.y()/CLHEP::GeV);
-      tmp4.SetPz(ekin*mom3.z()/CLHEP::GeV);
-      tmp4.SetE((*ForwardHC)[i]->GetEnergy()/CLHEP::GeV);
-      forward->SetMomentum(tmp4);
-      TVector3 tmp3;
-      tmp3.SetX((*ForwardHC)[i]->GetPosition().x());
-      tmp3.SetY((*ForwardHC)[i]->GetPosition().y());
-      tmp3.SetZ((*ForwardHC)[i]->GetPosition().z());
-      forward->SetPosition(tmp3);
+    Forward* forward=genAction->GetBeam();
+    forwardCont->Push_back(forward);
 
-      forward->SetIsBackground(false);
-
-      if(0)
-	G4cout << "Hit: " << tmp3.x() << " " << tmp3.y() << G4endl;
-
-      forwardCont->Push_back(forward);
-    }
     simEvent->SetForward(forwardCont);
   }
 
@@ -270,8 +269,12 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 			      (*GSObarHC)[i]->GetBelt(),
 			      (*GSObarHC)[i]->GetXY(),
 			      (*GSObarHC)[i]->GetBar(),
-			      (*GSObarHC)[i]->GetEdep(),
 			      (*GSObarHC)[i]->GetEdep_truth());
+      mcdataCont->SetBar((*GSObarHC)[i]->GetTower(),
+			 (*GSObarHC)[i]->GetBelt(),
+			 (*GSObarHC)[i]->GetXY(),
+			 (*GSObarHC)[i]->GetBar(),
+			 (*GSObarHC)[i]->GetEdep());
       //      if((*GSObarHC)[i]->GetEdep()>0)
       if(0)
 	G4cout << (*GSObarHC)[i]->GetTower() << " "

@@ -1,6 +1,5 @@
 ***********************************************
 *** How to use RHICf Geant4 simulation tool ***
-***                     created: 2016/08/25 ***
 ***********************************************
 
 0. To be installed (confirmed):
@@ -21,12 +20,13 @@
   Go to 'lib' directory and run 'make dict; make'
   Check if libRHICfEvent.so is created
 
-3. Compile the main source
-  Go to 'rhicf-vX.XX' directory and edit 'CMakeLists.txt' according to your environment
+3. Edit "setenv.sh"
+  Set your paths. No need to edit CMakeLists.txt or Makefile.
+
+4. Compile the main source
   Create 'build' directory somewhere else
   Go to 'build' directory
   Run 'cmake -DGeant4_DIR=[Directory where you have install Geant4]/lib64/Geant4-10.1.2' 
-  (If you have some problem check 'CMakeLists.txt' again!)
   Then 'make'
 
   Now you are ready!

@@ -2,7 +2,6 @@
 
 Forward::Forward()
 {
-  id=0;
   motherid=0;
   pdgcode=0;
   momentum=TLorentzVector();
@@ -13,8 +12,6 @@ Forward::Forward()
 Forward::~Forward()
 {;}
 
-void Forward::SetID(int aid)
-{ id=aid; }
 void Forward::SetMotherID(int amotherid)
 { motherid=amotherid; }
 void Forward::SetPDGcode(int apdgcode)
@@ -26,8 +23,6 @@ void Forward::SetPosition(TVector3 aposition)
 void Forward::SetIsBackground(bool aisbackground)
 { isbackground=aisbackground; }
 
-int Forward::GetID()
-{ return id; }
 int Forward::GetMotherID()
 { return motherid; }
 int Forward::GetPDGcode()

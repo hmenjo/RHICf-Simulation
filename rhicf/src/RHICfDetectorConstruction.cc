@@ -30,6 +30,7 @@
 #include "RHICfZDCSD.hh"
 #include "RHICfSMDSD.hh"
 #include "RHICfScinSD.hh"
+#include "RHICfBBCSD.hh"
 
 #include "RHICfParam.hpp"
 
@@ -64,11 +65,11 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
   /// Get World Volume
   fWorldPhysVol = parser.GetWorldVolume();
 
-  /// Magnetic field (DX magnet)
-  RHICfField* DXmagnetField=new RHICfField();
   G4FieldManager* FieldMan
     =G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  /// Magnetic field (DX magnet)
   if(flag.check(bTRANSPORT)) {
+    RHICfField* DXmagnetField=new RHICfField();
     FieldMan->SetDetectorField(DXmagnetField);
     FieldMan->CreateChordFinder(DXmagnetField);
   }
@@ -79,12 +80,16 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
   int ismdh=0, ismdv=0;
   int ilplate=0;
   int ilbar=0, ixysmall=0, ixylarge=0, ibarsmall=0, ibarlarge=0;
+  int iside=0;
+  int ibbc=0;
   G4PhysicalVolumeStore* pvs=G4PhysicalVolumeStore::GetInstance();
   for(G4PhysicalVolumeStore::iterator it=pvs->begin(); it!=pvs->end(); it++){
+    if(0) G4cout << (*it)->GetName() << G4endl;
+
     if((*it)->GetName()=="Vol-holder-scintillator-gso-assembly_PV") (*it)->SetCopyNo(ilplate++);
     if((*it)->GetName()=="Vol-gsobar-holder-assembly_PV") (*it)->SetCopyNo(ilbar++);
     if((*it)->GetName()=="Vol-gsobelt-holder-assembly_PV") (*it)->SetCopyNo(ilbar++);
-    if((*it)->GetName()=="Vol-gsobelt-small_PV") (*it)->SetCopyNo(ixysmall++);
+    if((*it)->GetName()=="Vol-gsobelt-small_PV") (*it)->SetCopyNo(ixysmall++); /// 0:x/1:y
     if((*it)->GetName()=="Vol-gsobar-small_PV") (*it)->SetCopyNo(ibarsmall++);
     if((*it)->GetName()=="Vol-gsobelt-large_PV") (*it)->SetCopyNo(ixylarge++);
     if((*it)->GetName()=="Vol-gsobar-large_PV") (*it)->SetCopyNo(ibarlarge++);
@@ -96,14 +101,18 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     if((*it)->GetName()=="Vol-smdv_PV") (*it)->SetCopyNo(ismdv++);
     if((*it)->GetName()=="Vol-fcsc_PV") (*it)->SetCopyNo(0);
     if((*it)->GetName()=="Vol-rcsc_PV") (*it)->SetCopyNo(1);
+
+    if((*it)->GetName()=="Vol-upstream-section_PV") (*it)->SetCopyNo(iside++); /// 0:eta>0/1:eta<0
+    if((*it)->GetName()=="Vol-bbc-tile-small_PV")   (*it)->SetCopyNo(ibbc++); /// 0-15
+    if((*it)->GetName()=="Vol-bbc-tile-large_PV")   (*it)->SetCopyNo(ibbc++); /// 16-31
   }
 
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
-  if(flag.check(bBEAMTEST)) {
-    RHICfForwardSD* ForwardSD = new RHICfForwardSD("Forward");
-    SDman->AddNewDetector(ForwardSD);
-  }
+  //  if(flag.check(bBEAMTEST)) {
+  //    RHICfForwardSD* ForwardSD = new RHICfForwardSD("Forward");
+  //    SDman->AddNewDetector(ForwardSD);
+  //  }
   if(flag.check(bGENERATE)) {
     RHICfCentralSD* CentralSD = new RHICfCentralSD("Central");
     SDman->AddNewDetector(CentralSD);
@@ -114,6 +123,8 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
   if(flag.check(bTRANSPORT)) {
     RHICfForwardSD* ForwardSD = new RHICfForwardSD("Forward");
     SDman->AddNewDetector(ForwardSD);
+    RHICfBBCSD* BBCSD = new RHICfBBCSD("BBC");
+    SDman->AddNewDetector(BBCSD);
   }
   if(flag.check(bRESPONSE_ARM1)) {
     RHICfGSOplateSD* GSOplateSD = new RHICfGSOplateSD("GSOplate");

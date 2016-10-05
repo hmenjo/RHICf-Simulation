@@ -15,16 +15,14 @@ void MCDataContainer::Reset()
 {
   RecoDataContainer::Reset();
 
-  for(int i=0; i<2; i++) {
-    bar_truth[i].clear();
-    bar_truth[i].resize(ntower);
-    for(int itower=0; itower<ntower; itower++) {
-      bar_truth[i][itower].resize(nbelt);
-      for(int ibelt=0; ibelt<nbelt; ibelt++) {
-	bar_truth[i][itower][ibelt].resize(nxy);
-	for(int ixy=0; ixy<nxy; ixy++) {
-	  bar_truth[i][itower][ibelt][ixy].resize(nbar[itower]);
-	}
+  bar_truth.clear();
+  bar_truth.resize(ntower);
+  for(int itower=0; itower<ntower; itower++) {
+    bar_truth[itower].resize(nbelt);
+    for(int ibelt=0; ibelt<nbelt; ibelt++) {
+      bar_truth[itower][ibelt].resize(nxy);
+      for(int ixy=0; ixy<nxy; ixy++) {
+	bar_truth[itower][ibelt][ixy].resize(nbar[itower]);
       }
     }
   }
@@ -36,16 +34,14 @@ void MCDataContainer::Reset()
   }
 }
 
-void MCDataContainer::SetBarTruth(int atower, int abelt, int axy, int abar, double aedep1, double aedep2)
+void MCDataContainer::SetBarTruth(int atower, int abelt, int axy, int abar, double aedep)
 {
-  bar_truth[0][atower][abelt][axy][abar]=aedep1;
-  bar_truth[1][atower][abelt][axy][abar]=aedep2;
+  bar_truth[atower][abelt][axy][abar]=aedep;
 }
 
-std::vector<std::vector<std::vector<std::vector<double> > > > MCDataContainer::GetBarTruth(int flag=0)
+std::vector<std::vector<std::vector<std::vector<double> > > > MCDataContainer::GetBarTruth()
 {
-  if(flag==0) return bar_truth[0];
-  else        return bar_truth[1];
+  return bar_truth;
 }
 
 void MCDataContainer::SetPlateTruth(int atower, int aplate, double aedep)

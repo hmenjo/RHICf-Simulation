@@ -62,12 +62,15 @@ G4bool RHICfCentralSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 
   /// Kill Tracks, they are already recorded.
   if(isBoundary) {
-    if(!opposite && postStepPoint->GetMomentum().eta()<0)
-      track->SetTrackStatus(fStopAndKill);
     if(track->GetKineticEnergy()<ecut) /// both in GeV
       track->SetTrackStatus(fStopAndKill);
-    if(fabs(postStepPoint->GetMomentum().eta())<etacut)
-      track->SetTrackStatus(fStopAndKill);
+    if(opposite) {
+      if(fabs(postStepPoint->GetMomentum().eta())<etacut)
+	track->SetTrackStatus(fStopAndKill);
+    }else{
+      if(postStepPoint->GetMomentum().eta()<etacut)
+	track->SetTrackStatus(fStopAndKill);
+    }
   }
 
   return true;

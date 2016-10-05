@@ -31,17 +31,16 @@ endif()
 
 #----------------------------------------------------------------------------
 # Find HepMC
-set(HEPMC_DIR /opt/software/HepMC)
-set(HEPMC_INCLUDE_DIR /opt/software/HepMC/include)
-set(HEPMC_LIBRARY /opt/software/HepMC/lib)
-include_directories(${HEPMC_DIR}/include)
-file(GLOB hepmc ${HEPMC_DIR}/lib/libHepMC.so)
+set(HEPMC_INCLUDE_DIR $ENV{HEPMC_INCLUDE})
+set(HEPMC_LIBRARY $ENV{HEPMC_LIBRARY})
+
+include_directories(${HEPMC_INCLUDE_DIR})
+file(GLOB hepmc ${HEPMC_LIBRARY}/libHepMC.so)
 
 #----------------------------------------------------------------------------
 # Find BOOST
-set (BOOST_ROOT "/opt/software/boost")
-set (BOOST_INCLUDEDIR "${BOOST_ROOT}/include")
-set (BOOST_LIBRARYDIR "${BOOST_ROOT}/lib")
+set (BOOST_INCLUDEDIR $ENV{BOOST_INCLUDE})
+set (BOOST_LIBRARYDIR $ENV{BOOST_LIBRARY})
 set (Boost_NO_SYSTEM_PATHS ON)
 set (Boost_USE_MULTITHREADED ON)
 set (Boost_USE_STATIC_LIBS ON)
@@ -56,9 +55,9 @@ endif()
 #----------------------------------------------------------------------------
 # Find Pythia8 (8.215)
 #find_package(Pythia8 REQUIRED)
-set(PYTHIA8_ROOT_DIR /opt/software/pythia8)
-set(PYTHIA8_INCLUDE_DIR ${PYTHIA8_ROOT_DIR}/include)
-set(PYTHIA8PLUGINS_INCLUDE_DIR ${PYTHIA8_ROOT_DIR}/include)
+set(PYTHIA8_INCLUDE_DIR $ENV{PYTHIA8_INCLUDE})
+set(PYTHIA8PLUGINS_INCLUDE_DIR $ENV{PYTHIA8_INCLUDE})
+set(PYTHIA8_LIBRARY_DIR $ENV{PYTHIA8_LIBRARY})
 
 find_path(PYTHIA8_INCLUDE_DIR
           NAMES Pythia.h Pythia8/Pythia.h
@@ -67,7 +66,7 @@ find_path(PYTHIA8_INCLUDE_DIR
 
 find_library(PYTHIA8_LIBRARY
              NAMES libpythia8.so libpythia8.a
-             PATHS ${PYTHIA8_ROOT_DIR}/lib
+             PATHS ${PYTHIA8_LIBRARY_DIR}
              DOC "Specify the Pythia8 library here.")
 
 foreach(_lib PYTHIA8_LIBRARY)
@@ -82,9 +81,12 @@ find_package_handle_standard_args(Pythia8 PYTHIA8_INCLUDES_DIRS PYTHIA8_LIBRARIE
 
 #----------------------------------------------------------------------------
 # Find RHICf library
-set(RHICF_TOP /home/Users/stak/g4work/rhicf/lib)
-include_directories(${RHICF_TOP})
-file(GLOB rhicflib ${RHICF_TOP}/libRHICfEvent.so)
+set(RHICF_TOP $ENV{RHICF_TOP})
+set(RHICF_LIB $ENV{RHICF_LIB})
+
+include_directories(${RHICF_LIB})
+file(GLOB rhicflib ${RHICF_LIB}/libRHICfEvent.so)
+message("RHICf library: ${rhicflib}")
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -132,4 +134,3 @@ endforeach()
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS rhicf DESTINATION bin)
-

@@ -90,9 +90,9 @@ G4bool RHICfZDCSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 
 	G4ThreeVector coord1=preStepPoint->GetPosition();
 	G4ThreeVector coord2=postStepPoint->GetPosition();
-	const G4AffineTransform transformation = touchable->GetHistory()->GetTopTransform();
-	G4ThreeVector local1=transformation.TransformPoint(coord1);
-	G4ThreeVector local2=transformation.TransformPoint(coord2);
+	const G4AffineTransform transform=touchable->GetHistory()->GetTopTransform();
+	G4ThreeVector local1=transform.TransformPoint(coord1);
+	G4ThreeVector local2=transform.TransformPoint(coord2);
 	G4double theta=(local2-local1).getTheta()/CLHEP::pi*180.;
 
 	if(beta>1./1.49 && theta>0 && theta<90) {

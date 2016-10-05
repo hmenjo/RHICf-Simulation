@@ -36,8 +36,7 @@ void RHICfGSObarSD::Initialize(G4HCofThisEvent* HCTE)
 
   /// Clear energy deposit buffer
   edep.clear();
-  edep_truth.clear();
-  edep.resize(ntower);
+  edep.resize(nside);
   edep_truth.resize(ntower);
   for(int itower=0; itower<ntower; itower++) {
     edep[itower].resize(nbelt);
