@@ -39,11 +39,6 @@ RHICfRunAction::~RHICfRunAction()
 
   delete trun;
   delete tevent;
-
-  /// Timer stop
-  fTimer->Stop();
-  fElapsedTime+=fTimer->GetRealElapsed();
-  G4cout << "Timer: " << fElapsedTime << " sec." << G4endl;
 }
 
 void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
@@ -301,4 +296,9 @@ void RHICfRunAction::EndOfRunAction(const G4Run*)
   srun << nrun;
   std::string rmtmp="rm -f Run"+srun.str()+".hepmc";
   system(rmtmp.c_str());
+
+  /// Timer stop
+  fTimer->Stop();
+  fElapsedTime+=fTimer->GetRealElapsed();
+  G4cout << "Timer: " << fElapsedTime << " sec." << G4endl;
 }

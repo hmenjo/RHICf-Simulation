@@ -66,14 +66,6 @@ G4bool RHICfGSOplateSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
   G4double localx=localPosition.x()*CLHEP::mm;
   G4double localy=localPosition.y()*CLHEP::mm;
 
-  if(0) {
-    std::ofstream fout("check.out",std::ios_base::out | std::ios_base::app);
-    fout <<  itower << " "<< iplate << " "
-	 << coord.x()*CLHEP::mm << " " << coord.y()*CLHEP::mm << " "
-	 << localx << " " << localy << " "
-	 << G4endl;
-  }
-  
   edep_truth[itower][iplate]+=astep->GetTotalEnergyDeposit();
   /// Rotate -90degrees
   edep[itower][iplate]+=astep->GetTotalEnergyDeposit()*gmap[itower][iplate]->Interpolate(localy,-localx);

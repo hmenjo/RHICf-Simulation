@@ -78,6 +78,7 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
   /// Set numbers for copy volumes
   int ifibr=0, igapf=0, izdc=0;
   int ismdh=0, ismdv=0;
+  int ismdh_star=0, ismdv_star=0;
   int ilplate=0;
   int ilbar=0, ixysmall=0, ixylarge=0, ibarsmall=0, ibarlarge=0;
   int iside=0;
@@ -97,6 +98,10 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     if((*it)->GetName()=="Vol-fibr_PV") (*it)->SetCopyNo(ifibr++);
     if((*it)->GetName()=="Vol-gapf_PV") (*it)->SetCopyNo(igapf++);
     if((*it)->GetName()=="Vol-zdc_PV")  (*it)->SetCopyNo(izdc++);
+    /// STAR SMD
+    if((*it)->GetName()=="Vol-smdh-strip_PV") (*it)->SetCopyNo(ismdh_star++);
+    if((*it)->GetName()=="Vol-smdv-strip_PV") (*it)->SetCopyNo(ismdv_star++);
+    /// PHENIX SMD
     if((*it)->GetName()=="Vol-smdh_PV") (*it)->SetCopyNo(ismdh++);
     if((*it)->GetName()=="Vol-smdv_PV") (*it)->SetCopyNo(ismdv++);
     if((*it)->GetName()=="Vol-fcsc_PV") (*it)->SetCopyNo(0);
@@ -107,8 +112,8 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     if((*it)->GetName()=="Vol-bbc-tile-large_PV")   (*it)->SetCopyNo(ibbc++); /// 16-31
   }
 
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //  if(flag.check(bBEAMTEST)) {
   //    RHICfForwardSD* ForwardSD = new RHICfForwardSD("Forward");
   //    SDman->AddNewDetector(ForwardSD);

@@ -152,12 +152,12 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       BeamInfo->SetPDGcode(dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleDefinition()->GetPDGEncoding());
       TLorentzVector tmp4;
       tmp4.SetPxPyPzE(dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentum()*
-		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().x(),
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().x()/CLHEP::GeV,
 		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentum()*
-		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().y(),
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().y()/CLHEP::GeV,
 		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentum()*
-		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().z(),
-		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleEnergy());
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleMomentumDirection().z()/CLHEP::GeV,
+		      dynamic_cast<G4ParticleGun*>(particleGun)->GetParticleEnergy()/CLHEP::GeV);
       BeamInfo->SetMomentum(tmp4);
       TVector3 tmp3;
       tmp3.SetXYZ(dynamic_cast<G4ParticleGun*>(particleGun)->GetParticlePosition().x(),

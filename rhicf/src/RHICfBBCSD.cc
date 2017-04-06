@@ -75,10 +75,10 @@ G4bool RHICfBBCSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 	G4Track* track=astep->GetTrack();
 	BBCParticle *p=new BBCParticle();
 	p->SetPDGCode(track->GetDynamicParticle()->GetPDGcode());
-	p->SetMomentum(TLorentzVector(track->GetMomentum().x(),
-				      track->GetMomentum().y(),
-				      track->GetMomentum().z(),
-				      track->GetTotalEnergy()));
+	p->SetMomentum(TLorentzVector(track->GetMomentum().x()/CLHEP::GeV,
+				      track->GetMomentum().y()/CLHEP::GeV,
+				      track->GetMomentum().z()/CLHEP::GeV,
+				      track->GetTotalEnergy()/CLHEP::GeV));
 	part[iside][ibbc].push_back(p);
       }
     }

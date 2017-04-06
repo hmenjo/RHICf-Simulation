@@ -10,7 +10,6 @@
   <define>
     <!-- Tilt plates and fibers -->
     <rotation name="Rot-45" unit="deg" x="45"/>
-    <rotation name="Rot-45r" unit="deg" x="-45"/>
 
     <position name="Pos-Center" unit="mm" x="0" y="0" z="0"/>
 
@@ -365,79 +364,23 @@
     <position name="Pos-zdc-3" unit="cm" x="0" y="zdcy" z="zdcz+lmod*2.0+lsmd*2.0"/>
     <position name="Pos-smd-gap" unit="cm" x="0" y="zdcy" z="zdcz-lmod+lsmd"/>
     <!-- SMD -->
-    <position name="Pos-smdv" unit="mm" x="0" y="0" z="-4"/>
-
-    <rotation name="Rot-smdv-flip" unit="deg" x="0" y="180" z="0"/>
-    <position name="Pos-smdv-strip-sub-l" unit="mm" x="-5" y="0" z="3.5"/>
-    <rotation name="Rot-smdv-strip-sub-l" unit="rad" x="0" y="-atan(7/5)" z="0"/>
-    <position name="Pos-smdv-strip-sub-r" unit="mm" x="+5" y="0" z="3.5"/>
-    <rotation name="Rot-smdv-strip-sub-r" unit="rad" x="0" y="atan(7/5)" z="0"/>
-
-    <position name="Pos-smdv-strip-f-00" unit="mm" x="-50+10*00" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-01" unit="mm" x="-50+10*01" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-02" unit="mm" x="-50+10*02" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-03" unit="mm" x="-50+10*03" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-04" unit="mm" x="-50+10*04" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-05" unit="mm" x="-50+10*05" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-06" unit="mm" x="-50+10*06" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-07" unit="mm" x="-50+10*07" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-08" unit="mm" x="-50+10*08" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-09" unit="mm" x="-50+10*09" y="0" z="0"/>
-    <position name="Pos-smdv-strip-f-10" unit="mm" x="-50+10*10" y="0" z="0"/>
-
-    <position name="Pos-smdv-strip-b-00" unit="mm" x="-45+10*00" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-01" unit="mm" x="-45+10*01" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-02" unit="mm" x="-45+10*02" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-03" unit="mm" x="-45+10*03" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-04" unit="mm" x="-45+10*04" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-05" unit="mm" x="-45+10*05" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-06" unit="mm" x="-45+10*06" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-07" unit="mm" x="-45+10*07" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-08" unit="mm" x="-45+10*08" y="0" z="0"/>
-    <position name="Pos-smdv-strip-b-09" unit="mm" x="-45+10*09" y="0" z="0"/>
-
-    <position name="Pos-smdh" unit="mm" x="0" y="0" z="4"/>
-
-    <rotation name="Rot-smdh-flip" unit="deg" x="180" y="0" z="0"/>
-    <position name="Pos-smdh-strip-sub-l" unit="mm" x="0" y="-5" z="3.5"/>
-    <rotation name="Rot-smdh-strip-sub-l" unit="rad" x="-atan(5/7)" y="0" z="0"/>
-    <position name="Pos-smdh-strip-sub-r" unit="mm" x="0" y="+5" z="3.5"/>
-    <rotation name="Rot-smdh-strip-sub-r" unit="rad" x="atan(5/7)" y="0" z="0"/>
-
-    <position name="Pos-smdh-strip-f-00" unit="mm" x="0" y="-77.5+10*00" z="0"/>
-    <position name="Pos-smdh-strip-f-01" unit="mm" x="0" y="-77.5+10*01" z="0"/>
-    <position name="Pos-smdh-strip-f-02" unit="mm" x="0" y="-77.5+10*02" z="0"/>
-    <position name="Pos-smdh-strip-f-03" unit="mm" x="0" y="-77.5+10*03" z="0"/>
-    <position name="Pos-smdh-strip-f-04" unit="mm" x="0" y="-77.5+10*04" z="0"/>
-    <position name="Pos-smdh-strip-f-05" unit="mm" x="0" y="-77.5+10*05" z="0"/>
-    <position name="Pos-smdh-strip-f-06" unit="mm" x="0" y="-77.5+10*06" z="0"/>
-    <position name="Pos-smdh-strip-f-07" unit="mm" x="0" y="-77.5+10*07" z="0"/>
-    <position name="Pos-smdh-strip-f-08" unit="mm" x="0" y="-77.5+10*08" z="0"/>
-    <position name="Pos-smdh-strip-f-09" unit="mm" x="0" y="-77.5+10*09" z="0"/>
-    <position name="Pos-smdh-strip-f-10" unit="mm" x="0" y="-77.5+10*10" z="0"/>
-    <position name="Pos-smdh-strip-f-11" unit="mm" x="0" y="-77.5+10*11" z="0"/>
-    <position name="Pos-smdh-strip-f-12" unit="mm" x="0" y="-77.5+10*12" z="0"/>
-    <position name="Pos-smdh-strip-f-13" unit="mm" x="0" y="-77.5+10*13" z="0"/>
-    <position name="Pos-smdh-strip-f-14" unit="mm" x="0" y="-77.5+10*14" z="0"/>
-    <position name="Pos-smdh-strip-f-15" unit="mm" x="0" y="-77.5+10*15" z="0"/>
-
-    <position name="Pos-smdh-strip-b-00" unit="mm" x="0" y="-72.5+10*00" z="0"/>
-    <position name="Pos-smdh-strip-b-01" unit="mm" x="0" y="-72.5+10*01" z="0"/>
-    <position name="Pos-smdh-strip-b-02" unit="mm" x="0" y="-72.5+10*02" z="0"/>
-    <position name="Pos-smdh-strip-b-03" unit="mm" x="0" y="-72.5+10*03" z="0"/>
-    <position name="Pos-smdh-strip-b-04" unit="mm" x="0" y="-72.5+10*04" z="0"/>
-    <position name="Pos-smdh-strip-b-05" unit="mm" x="0" y="-72.5+10*05" z="0"/>
-    <position name="Pos-smdh-strip-b-06" unit="mm" x="0" y="-72.5+10*06" z="0"/>
-    <position name="Pos-smdh-strip-b-07" unit="mm" x="0" y="-72.5+10*07" z="0"/>
-    <position name="Pos-smdh-strip-b-08" unit="mm" x="0" y="-72.5+10*08" z="0"/>
-    <position name="Pos-smdh-strip-b-09" unit="mm" x="0" y="-72.5+10*09" z="0"/>
-    <position name="Pos-smdh-strip-b-10" unit="mm" x="0" y="-72.5+10*10" z="0"/>
-    <position name="Pos-smdh-strip-b-11" unit="mm" x="0" y="-72.5+10*11" z="0"/>
-    <position name="Pos-smdh-strip-b-12" unit="mm" x="0" y="-72.5+10*12" z="0"/>
-    <position name="Pos-smdh-strip-b-13" unit="mm" x="0" y="-72.5+10*13" z="0"/>
-    <position name="Pos-smdh-strip-b-14" unit="mm" x="0" y="-72.5+10*14" z="0"/>
-    <position name="Pos-smdh-strip-b-15" unit="mm" x="0" y="-72.5+10*15" z="0"/>
-
+    <variable name="ismdh" value="2.0*11.0/10.5"/>
+    <position name="Pos-smdh-0" unit="cm" x="0" y="-0.4" z="(3.5-0)*ismdh"/>
+    <position name="Pos-smdh-1" unit="cm" x="0" y="-0.4" z="(3.5-1)*ismdh"/>
+    <position name="Pos-smdh-2" unit="cm" x="0" y="-0.4" z="(3.5-2)*ismdh"/>
+    <position name="Pos-smdh-3" unit="cm" x="0" y="-0.4" z="(3.5-3)*ismdh"/>
+    <position name="Pos-smdh-4" unit="cm" x="0" y="-0.4" z="(3.5-4)*ismdh"/>
+    <position name="Pos-smdh-5" unit="cm" x="0" y="-0.4" z="(3.5-5)*ismdh"/>
+    <position name="Pos-smdh-6" unit="cm" x="0" y="-0.4" z="(3.5-6)*ismdh"/>
+    <position name="Pos-smdh-7" unit="cm" x="0" y="-0.4" z="(3.5-7)*ismdh"/>
+    <variable name="ismdv" value="1.5*11.0/10.5"/>
+    <position name="Pos-smdv-0" unit="cm" x="(0-3)*ismdv" y="0.4" z="0"/>
+    <position name="Pos-smdv-1" unit="cm" x="(1-3)*ismdv" y="0.4" z="0"/>
+    <position name="Pos-smdv-2" unit="cm" x="(2-3)*ismdv" y="0.4" z="0"/>
+    <position name="Pos-smdv-3" unit="cm" x="(3-3)*ismdv" y="0.4" z="0"/>
+    <position name="Pos-smdv-4" unit="cm" x="(4-3)*ismdv" y="0.4" z="0"/>
+    <position name="Pos-smdv-5" unit="cm" x="(5-3)*ismdv" y="0.4" z="0"/>
+    <position name="Pos-smdv-6" unit="cm" x="(6-3)*ismdv" y="0.4" z="0"/>
     <!-- Iron & aluminium plates -->
     <position name="Pos-fepl" unit="cm" x="0" y="-7.765" z="lmod*3+smd1/sin45+lmod*0.5-60."/>
     <position name="Pos-alpl" unit="cm" x="0" y="-11.765" z="lmod*3+smd1/sin45+lmod*0.5-60."/>
@@ -523,46 +466,11 @@
       <positionref ref="Pos-smd-sub-1"/>
       <rotationref ref="Rot-45"/>
     </subtraction>
-    <box name="Log-smd" lunit="mm" x="110" y="165" z="16"/>
+    <box name="Log-smd" lunit="cm" x="smd0*2.0" y="smd1*2.0" z="smd2*2.0"/>
     <!-- SMDH -->
-    <box name="Log-smdh" lunit="mm" x="110" y="165" z="8"/>
-    <box name="Log-smdh-strip-main" lunit="mm" x="110" y="10" z="7"/>
-    <box name="Log-smdh-strip-sub" lunit="mm" x="111" y="70/sqrt(74)" z="12"/>
-
-    <subtraction name="Log-smdh-strip-00">
-      <first ref="Log-smdh-strip-main"/>
-      <second ref="Log-smdh-strip-sub"/>
-      <positionref ref="Pos-smdh-strip-sub-l"/>
-      <rotationref ref="Rot-smdh-strip-sub-l"/>
-      <firstpositionref ref="Pos-Center"/>
-    </subtraction>
-    <subtraction name="Log-smdh-strip">
-      <first ref="Log-smdh-strip-00"/>
-      <second ref="Log-smdh-strip-sub"/>
-      <positionref ref="Pos-smdh-strip-sub-r"/>
-      <rotationref ref="Rot-smdh-strip-sub-r"/>
-      <firstpositionref ref="Pos-Center"/>
-    </subtraction>
-
+    <box name="Log-smdh" lunit="cm" x="smdh0*2.0" y="smdh1*2.0" z="smdh2*2.0"/>
     <!-- SMDV -->
-    <box name="Log-smdv" lunit="mm" x="110" y="165" z="8"/>
-    <box name="Log-smdv-strip-main" lunit="mm" x="10" y="165" z="7"/>
-    <box name="Log-smdv-strip-sub" lunit="mm" x="12" y="166" z="70/sqrt(74)"/>
-
-    <subtraction name="Log-smdv-strip-00">
-      <first ref="Log-smdv-strip-main"/>
-      <second ref="Log-smdv-strip-sub"/>
-      <positionref ref="Pos-smdv-strip-sub-l"/>
-      <rotationref ref="Rot-smdv-strip-sub-l"/>
-      <firstpositionref ref="Pos-Center"/>
-    </subtraction>
-    <subtraction name="Log-smdv-strip">
-      <first ref="Log-smdv-strip-00"/>
-      <second ref="Log-smdv-strip-sub"/>
-      <positionref ref="Pos-smdv-strip-sub-r"/>
-      <rotationref ref="Rot-smdv-strip-sub-r"/>
-      <firstpositionref ref="Pos-Center"/>
-    </subtraction>
+    <box name="Log-smdv" lunit="cm" x="smdv0*2.0" y="smdv1*2.0" z="smdv2*2.0"/>
 
     <!-- FEPL -->
     <box name="Log-fepl" lunit="cm" x="fe0*2.0" y="fe1*2.0" z="fe2*2.0"/>
@@ -1692,277 +1600,79 @@
       </physvol>
     </volume>
 
-    <volume name="Vol-smdv-strip">
-      <materialref ref="Scintillator"/>
-      <solidref ref="Log-smdv-strip"/>
-      <auxiliary auxtype="SensDet" auxvalue="SMD"/>
-    </volume>
-
-    <volume name="Vol-smdv">
-      <materialref ref="Air"/>
-      <solidref ref="Log-smdv"/>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-00"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-01"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-02"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-03"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-04"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-05"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-06"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-07"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-08"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-09"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-f-10"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-00"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-01"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-02"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-03"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-04"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-05"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-06"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-07"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-08"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdv-strip"/>
-        <positionref ref="Pos-smdv-strip-b-09"/>
-        <rotationref ref="Rot-smdv-flip"/>
-      </physvol>
-    </volume>
-
-    <volume name="Vol-smdh-strip">
-      <materialref ref="Scintillator"/>
-      <solidref ref="Log-smdh-strip"/>
-      <auxiliary auxtype="SensDet" auxvalue="SMD"/>
-    </volume>
-
     <volume name="Vol-smdh">
-      <materialref ref="Air"/>
+      <materialref ref="Scintillator"/>
       <solidref ref="Log-smdh"/>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-00"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-01"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-02"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-03"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-04"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-05"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-06"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-07"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-08"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-09"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-10"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-11"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-12"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-13"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-14"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-f-15"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-00"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-01"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-02"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-03"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-04"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-05"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-06"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-07"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-08"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-09"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-10"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-11"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-12"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-13"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-14"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-smdh-strip"/>
-        <positionref ref="Pos-smdh-strip-b-15"/>
-        <rotationref ref="Rot-smdh-flip"/>
-      </physvol>
+      <auxiliary auxtype="SensDet" auxvalue="SMD"/>
     </volume>
-    
-
+    <volume name="Vol-smdv">
+      <materialref ref="Scintillator"/>
+      <solidref ref="Log-smdv"/>
+      <auxiliary auxtype="SensDet" auxvalue="SMD"/>
+    </volume>
     <volume name="Vol-smd">
       <materialref ref="Air"/>
       <solidref ref="Log-smd"/>
       <physvol>
-        <volumeref ref="Vol-smdv"/>
-        <positionref ref="Pos-smdv"/>
+        <volumeref ref="Vol-smdh"/>
+        <positionref ref="Pos-smdh-0"/>
       </physvol>
       <physvol>
         <volumeref ref="Vol-smdh"/>
-        <positionref ref="Pos-smdh"/>
+        <positionref ref="Pos-smdh-1"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdh"/>
+        <positionref ref="Pos-smdh-2"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdh"/>
+        <positionref ref="Pos-smdh-3"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdh"/>
+        <positionref ref="Pos-smdh-4"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdh"/>
+        <positionref ref="Pos-smdh-5"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdh"/>
+        <positionref ref="Pos-smdh-6"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdh"/>
+        <positionref ref="Pos-smdh-7"/>
+      </physvol>
+
+      <physvol>
+        <volumeref ref="Vol-smdv"/>
+        <positionref ref="Pos-smdv-0"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdv"/>
+        <positionref ref="Pos-smdv-1"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdv"/>
+        <positionref ref="Pos-smdv-2"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdv"/>
+        <positionref ref="Pos-smdv-3"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdv"/>
+        <positionref ref="Pos-smdv-4"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdv"/>
+        <positionref ref="Pos-smdv-5"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-smdv"/>
+        <positionref ref="Pos-smdv-6"/>
       </physvol>
     </volume>
     <volume name="Vol-smd-gap">
@@ -1971,7 +1681,7 @@
       <physvol>
         <volumeref ref="Vol-smd"/>
         <positionref ref="Pos-smd"/>
-        <rotationref ref="Rot-45r"/>
+        <rotationref ref="Rot-45"/>
       </physvol>
     </volume>
 
@@ -2025,7 +1735,7 @@
         <volumeref ref="Vol-alpl"/>
         <positionref ref="Pos-alpl"/>
       </physvol>
-<!--
+
       <physvol>
         <volumeref ref="Vol-fcsc"/>
         <positionref ref="Pos-fcsc"/>
@@ -2034,11 +1744,10 @@
         <volumeref ref="Vol-rcsc"/>
         <positionref ref="Pos-rcsc"/>
       </physvol>
--->
     </volume>
   </structure>
 
-  <setup name="Default" version="1.0">
+  <setup name="zdc" version="1.0">
     <world ref="Vol-wcnt"/>
   </setup>
 </gdml>

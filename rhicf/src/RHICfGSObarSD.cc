@@ -6,8 +6,6 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 
-#include <fstream>
-
 #include "RHICfDetectorConstruction.hh"
 #include "RHICfGSObarSD.hh"
 
@@ -36,6 +34,7 @@ void RHICfGSObarSD::Initialize(G4HCofThisEvent* HCTE)
 
   /// Clear energy deposit buffer
   edep.clear();
+  edep_truth.clear();
   edep.resize(nside);
   edep_truth.resize(ntower);
   for(int itower=0; itower<ntower; itower++) {
@@ -76,18 +75,9 @@ G4bool RHICfGSObarSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
   G4double localx=localPosition.x()*CLHEP::mm;
   G4double localy=localPosition.y()*CLHEP::mm;
   /// Flip coordinates
-  if(ixy==1) {
-    localx=localx*(-1);
-    localy=localy*(-1);
-  }
 
-  if(0) {
-    std::ofstream fout("check.out",std::ios_base::out | std::ios_base::app);
-    fout <<  itower << " "<< ibelt << " " << ixy << " " << ibar << " "
-	 << coord.x()*CLHEP::mm << " " << coord.y()*CLHEP::mm << " "
-	 << localx << " " << localy << " "
-	 << G4endl;
-  }
+  if(ixy==0) localx=localx*(-1);
+
   edep[itower][ibelt][ixy][ibar]+=astep->GetTotalEnergyDeposit();
   edep_truth[itower][ibelt][ixy][ibar]
     +=astep->GetTotalEnergyDeposit()*gatt[itower][ibelt][ixy][ibar]->Eval(localx);

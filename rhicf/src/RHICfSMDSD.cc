@@ -49,9 +49,25 @@ G4bool RHICfSMDSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
   G4TouchableHistory* touchable = (G4TouchableHistory*)(preStepPoint->GetTouchable());
 
   G4int ixy=-1;
-  if(touchable->GetVolume(0)->GetName()=="Vol-smdh_PV") ixy=0;
-  if(touchable->GetVolume(0)->GetName()=="Vol-smdv_PV") ixy=1;
-  G4int ismd=touchable->GetReplicaNumber(0);
+  G4int ismd;
+  /// PHENIX
+  if(touchable->GetVolume(0)->GetName()=="Vol-smdh_PV" ||
+     touchable->GetVolume(0)->GetName()=="Vol-smdv_PV") {
+    if(touchable->GetVolume(0)->GetName()=="Vol-smdh_PV") ixy=0;
+    if(touchable->GetVolume(0)->GetName()=="Vol-smdv_PV") ixy=1;
+    ismd=touchable->GetReplicaNumber(0);
+  }
+  /// STAR
+  if(touchable->GetVolume(0)->GetName()=="Vol-smdh-strip_PV" ||
+     touchable->GetVolume(0)->GetName()=="Vol-smdv-strip_PV") {
+    if(touchable->GetVolume(0)->GetName()=="Vol-smdh-strip_PV") {
+      ixy=0;
+      ismd=int(touchable->GetReplicaNumber(0)/4);
+    }else if(touchable->GetVolume(0)->GetName()=="Vol-smdv-strip_PV") {
+      ixy=1;
+      ismd=int(touchable->GetReplicaNumber(0)/3);
+    }
+  }
 
   /// Accumulate energy deposit in each scintillator
   edep[ixy][ismd]+=astep->GetTotalEnergyDeposit();
