@@ -37,17 +37,18 @@ RHICfSteppingAction::~RHICfSteppingAction()
 void RHICfSteppingAction::UserSteppingAction(const G4Step* astep)
 {
 #ifdef DUMPTRACK
-  std::ofstream of("steps.log", std::ios::out | std::ios::app );
-
   G4Track* track=astep->GetTrack();
   G4StepPoint* preStep=astep->GetPreStepPoint();
   G4VPhysicalVolume* prePV=preStep->GetPhysicalVolume();
   G4StepPoint* postStep=astep->GetPostStepPoint();
   G4VPhysicalVolume* postPV=postStep->GetPhysicalVolume();
 
+  std::ofstream of("steps.log", std::ios::out | std::ios::app );
+
   of << track->GetTrackID() << " "
      << track->GetParentID() << " "
      << track->GetDynamicParticle()->GetPDGcode() << " "
+     << track->GetTotalEnergy()/CLHEP::GeV << " "
      << preStep->GetMomentum().x() << " "
      << preStep->GetMomentum().y() << " "
      << preStep->GetMomentum().z() << " "

@@ -22,6 +22,8 @@ void Forward::SetPosition(TVector3 aposition)
 { position=aposition; }
 void Forward::SetIsBackground(bool aisbackground)
 { isbackground=aisbackground; }
+void Forward::SetIntermediate(Forward* aintermediate)
+{ intermediate=aintermediate; }
 
 int Forward::GetMotherID()
 { return motherid; }
@@ -33,3 +35,5 @@ TVector3 Forward::GetPosition()
 { return position; }
 bool Forward::IsBackground()
 { return isbackground; }
+Forward* Forward::GetIntermediate()
+{ return intermediate; }

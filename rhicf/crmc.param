@@ -28,25 +28,29 @@ nodecay  18    !uncomment not to decay tritium
 nodecay -18    !uncomment not to decay antitritium
 nodecay  19    !uncomment not to decay alpha
 nodecay -19    !uncomment not to decay antialpha
+nodecay  110   !no pi0 decay
+nodecay  230   !no K0 decay
+nodecay -230   !no K0bar decay
+nodecay  220   !no eta decay
 !... more possible (with EPOS id (not PDG))
 !for other particles, please ask authors ... or use minimum ctau (cm) :
 
-MinDecayLength  1.    !minimum c.Tau to define stable particles (cm)
+MinDecayLength  .1    !minimum c.Tau to define stable particles (cm)
 
-fdpmjetpho dat   /opt/software/crmc.v1.5.3-build/tabs/phojet_fitpar.dat
-fdpmjet dat   /opt/software/crmc.v1.5.3-build/tabs/dpmjet.dat
-fqgsjet dat   /opt/software/crmc.v1.5.3-build/tabs/qgsjet.dat
-fqgsjet ncs   /opt/software/crmc.v1.5.3-build/tabs/qgsjet.ncs
-fqgsjetII03 dat /opt/software/crmc.v1.5.3-build/tabs/qgsdat-II-03.lzma
-fqgsjetII03 ncs /opt/software/crmc.v1.5.3-build/tabs/sectnu-II-03
-fqgsjetII dat /opt/software/crmc.v1.5.3-build/tabs/qgsdat-II-04.lzma
-fqgsjetII ncs /opt/software/crmc.v1.5.3-build/tabs/sectnu-II-04
+fdpmjetpho dat   CRMCDIR/tabs/phojet_fitpar.dat
+fdpmjet dat   CRMCDIR/tabs/dpmjet.dat
+fqgsjet dat   CRMCDIR/tabs/qgsjet.dat
+fqgsjet ncs   CRMCDIR/tabs/qgsjet.ncs
+fqgsjetII03 dat CRMCDIR/tabs/qgsdat-II-03.lzma
+fqgsjetII03 ncs CRMCDIR/tabs/sectnu-II-03
+fqgsjetII dat CRMCDIR/tabs/qgsdat-II-04.lzma
+fqgsjetII ncs CRMCDIR/tabs/sectnu-II-04
 fname check  none
-fname initl  /opt/software/crmc.v1.5.3-build/tabs/epos.initl
-fname iniev  /opt/software/crmc.v1.5.3-build/tabs/epos.iniev
-fname inirj  /opt/software/crmc.v1.5.3-build/tabs/epos.inirj
-fname inics  /opt/software/crmc.v1.5.3-build/tabs/epos.inics
-fname inihy  /opt/software/crmc.v1.5.3-build/tabs/epos.inihy
+fname initl  CRMCDIR/tabs/epos.initl
+fname iniev  CRMCDIR/tabs/epos.iniev
+fname inirj  CRMCDIR/tabs/epos.inirj
+fname inics  CRMCDIR/tabs/epos.inics
+fname inihy  CRMCDIR/tabs/epos.inihy
 
 set pytune 350   !possibility to change PYTHIA tune (for PYTHIA only !)
 

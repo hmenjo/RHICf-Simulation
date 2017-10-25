@@ -9,7 +9,7 @@ RHICfField::~RHICfField()
 void RHICfField::GetFieldValue(const double Point[3],double *Bfield) const
 {
   //  double By=1.7578*CLHEP::tesla; /// <-wrong? (DX magnet design is: 4.28T)
-  double By=4.255*CLHEP::tesla;
+  double By=-4.255*CLHEP::tesla; /// <-correct (field reversed)
   /// To avoid G4MultiLevelLocator::EstimateIntersectionPoint() 
   /// warning and Error messages,  rmax is slightly larger than
   /// the diameter of the beam pipe. (6.99->7.00)

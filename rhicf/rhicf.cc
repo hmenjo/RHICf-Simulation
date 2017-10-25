@@ -24,6 +24,7 @@
 #include "RHICfTrackingAction.hh"
 #include "RHICfSteppingAction.hh"
 #include "RHICfStackingAction.hh"
+#include "RHICfReconstruction.hh"
 #include "RHICfParam.hpp"
 
 #undef G4VIS_USE
@@ -88,7 +89,7 @@ int main(int argc,char** argv)
   options_description opt3("For Transport/Full mode");
   opt3.add_options()
     ("ETACUT", value<double>()->default_value(4.8), "Rapidity cut")
-    ("ECUT", value<double>()->default_value(0.5), "Energy cut in GeV")
+    ("ECUT", value<double>()->default_value(0.0), "Energy cut in GeV")
     ("OPPOSITE", value<std::string>()->default_value("FALSE"), "If true, simulate particles in eta<0");
   options_description opt4("For Transport/Response mode");
   opt4.add_options()
@@ -98,13 +99,18 @@ int main(int argc,char** argv)
     ("BEAM", value<std::string>()->default_value("geantino"), "particle name (Define by Geant4)")
     ("EBEAM", value<double>()->default_value(200), "particle energy in GeV")
     ("PBEAM", value<std::string>()->default_value("UNIFORM"), "particle position");
+  options_description opt6("For Reconstruction mode (Set INPUTFILE/OUTPUTFILE)");
+  opt6.add_options()
+    ("RECONSTRUCT", value<std::string>()->default_value("FALSE"), "Reconstruct TRUE or FALSE");
+
   options_description opt("Possible options");
   opt.add(opt_common)
     .add(opt1)
     .add(opt2)
     .add(opt3)
     .add(opt4)
-    .add(opt5);
+    .add(opt5)
+    .add(opt6);
 
   variables_map vm;
   try{
@@ -115,6 +121,82 @@ int main(int argc,char** argv)
     G4cout << ex.what() << G4endl;
     exit(1);
   }
+
+  /// Reconstruction mode: reconstruct and exit
+  std::string reco=vm["RECONSTRUCT"].as<std::string>();
+  if(reco=="TRUE") {
+    G4cout << "Reconstruction mode" << G4endl;
+
+    /// Set output
+    fs::path foutput;
+    foutput=vm["OUTPUTFILE"].as<fs::path>();
+    /// Prepare output file
+    if(foutput.branch_path()!="" && !fs::exists(foutput.branch_path())) {
+      boost::system::error_code error;
+      const bool result=fs::create_directories(foutput.branch_path(), error);
+      if(!result || error) {
+	std::string mes="Could not create directory "+foutput.branch_path().string()+".";
+	G4Exception("rhicf","Invalid Directory",FatalException,mes.c_str());
+      }
+    }
+
+    /// Set input
+    fs::path finput;
+    finput=vm["INPUTFILE"].as<fs::path>();
+    TFile *fin=new TFile(finput.string().c_str());
+    if(!fin->IsZombie()) {
+      TTree *tin=(TTree*)fin->Get("RunInfo");
+
+      RunInfo* runInfo=new RunInfo();
+      tin->SetBranchAddress("RunInfo",&runInfo);
+      tin->GetEntry(0);
+    }else{
+      G4cerr << finput.string() << " does not exist!" << G4endl;
+      exit(1);
+    }
+
+    /// Set tables
+    fs::path ftables;
+    try{
+      ftables=vm["TABLESDIR"].as<fs::path>();
+    }catch(const boost::bad_any_cast& ex) {
+      G4cout << ex.what() << G4endl;
+      exit(1);
+    }
+    if(!fs::exists(ftables)) {
+      std::string mes="Directory "+ ftables.string() +" does not exist.";
+      G4Exception("rhicf","Invalid Directory",FatalException,mes.c_str());
+    }
+
+    G4cout << "Input:  " << finput.string()  << G4endl;
+    G4cout << "Output: " << foutput.string() << G4endl;
+
+    TFile *fout=new TFile(foutput.string().c_str(),"recreate");
+    TTree *trun_out=new TTree("RunInfo", "RunInfo");
+    TTree *tevent_out=new TTree("EventInfo", "EventInfo");
+    RunInfo* runInfo_out=new RunInfo();
+    trun_out->Branch("RunInfo", &runInfo_out);
+    RHICfSimEvent* simEvent_out=new RHICfSimEvent();
+    tevent_out->Branch("SimEvent", &simEvent_out);
+    RHICfReconstruction* reconstruction=new RHICfReconstruction(new TFile(finput.string().c_str()),fout,ftables);
+
+    trun_out->Print();
+    tevent_out->Print();
+
+    fout->cd();
+    trun_out->SetDirectory(fout);
+    trun_out->Write();
+    tevent_out->SetDirectory(fout);
+    tevent_out->Write();
+
+    fout->Close();
+
+    return 1;
+  }else if(reco=="FALSE") {
+  }else{
+    G4Exception("rhicf","Invalid opttion",FatalException,"RECONSTRUCT option: choose TRUE or FALSE");
+  }
+
 
   /// Check common parameters
   std::string mode;
@@ -272,7 +354,8 @@ int main(int argc,char** argv)
   bool opposite;
   if(flag.check(bTRANSPORT)) {
     etacut=vm["ETACUT"].as<double>();
-    ecut=vm["ECUT"].as<double>();
+    //    ecut=vm["ECUT"].as<double>();
+    ecut=0.;
     if(vm["OPPOSITE"].as<std::string>()=="TRUE") 
       opposite=true;
     else if(vm["OPPOSITE"].as<std::string>()=="FALSE") 
@@ -325,6 +408,13 @@ int main(int argc,char** argv)
     bEnergy=vm["EBEAM"].as<double>();
     bPosition=vm["PBEAM"].as<std::string>();
     seed2=0;
+  }else if(fmodel=="Single") {
+    bParticle=vm["BEAM"].as<std::string>();
+    bEnergy=vm["EBEAM"].as<double>();
+    bPosition="UNIFORM";
+    seed2=0;
+    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("Single");
+    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetBeam(bParticle,bEnergy*CLHEP::GeV,bPosition,DetPosition);
   }
 
   detector->SetGeometry(fgeometry.string(),fdetector,flag);
@@ -335,6 +425,7 @@ int main(int argc,char** argv)
   dynamic_cast<RHICfRunAction*>(runAction)->SetNevent(nevent);
   dynamic_cast<RHICfRunAction*>(runAction)->SetRunNumber(nrun);
   dynamic_cast<RHICfRunAction*>(runAction)->SetModel(fmodel);
+  dynamic_cast<RHICfRunAction*>(runAction)->SetCrossSection(sigTot,sigEla,sigIne);
   dynamic_cast<RHICfRunAction*>(runAction)->SetOutput(foutput.string());
  if(flag.check(bBEAMTEST)) {
     dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("BeamTest");

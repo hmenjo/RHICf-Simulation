@@ -1,4 +1,5 @@
 #include <boost/filesystem.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "RHICfPrimaryGeneratorAction.hh"
 #include "RHICfPrimaryGeneratorMessenger.hh"
@@ -16,7 +17,7 @@
 #include "globals.hh"
 
 namespace fs=boost::filesystem;
-
+namespace pt=boost::posix_time;
 
 RHICfPrimaryGeneratorAction::RHICfPrimaryGeneratorAction()
 {
@@ -28,6 +29,7 @@ RHICfPrimaryGeneratorAction::RHICfPrimaryGeneratorAction()
   gentypeMap["Transport"] = particleGun;
   gentypeMap["Response"]  = particleGun;
   gentypeMap["BeamTest"]  = particleGun;
+  gentypeMap["Single"]    = particleGun;
 
   messenger= new RHICfPrimaryGeneratorMessenger(this);
 }
@@ -70,14 +72,14 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			  central[i]->GetPosition2().y(),
 			  central[i]->GetPosition2().z());
 	particles[ipart]->SetParticlePosition(pos);
-	mom=G4LorentzVector(central[i]->GetMomentum().Vect().Unit().Px(),
-			    central[i]->GetMomentum().Vect().Unit().Py(),
-			    central[i]->GetMomentum().Vect().Unit().Pz());
+	mom=G4ThreeVector(central[i]->GetMomentum().Vect().Unit().Px(),
+			  central[i]->GetMomentum().Vect().Unit().Py(),
+			  central[i]->GetMomentum().Vect().Unit().Pz());
 	particles[ipart]->SetParticleMomentumDirection(mom);
-	ekin=central[i]->GetMomentum().Energy();
+	ekin=(pow(central[i]->GetMomentum().E(),2)-
+	      pow(central[i]->GetMomentum().M(),2));
 	particles[ipart]->SetParticleEnergy(ekin*CLHEP::GeV);
 	particles[ipart]->GeneratePrimaryVertex(anEvent);
-
 	ipart++;
       }
       CentralID.clear();
@@ -87,11 +89,10 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	if(central[i]->GetMomentum().E()<ecut)  continue; /// both in GeV
 	if(fabs(central[i]->GetMomentum().Eta())<etacut)   continue;
 
-	if(central[i]->GetMotherID()==0) {
+	if(central[i]->GetMotherID()==0)
 	  CentralID.insert(std::multimap<G4int, G4int>::value_type(ipart, central[i]->GetID()));
-	}else{
+	else
 	  CentralID.insert(std::multimap<G4int, G4int>::value_type(ipart, central[i]->GetMotherID()));
-	}
 	ipart--;
       }
     }else if(currentGeneratorName=="Response") {
@@ -129,7 +130,12 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4ThreeVector direction;
 
       direction=G4ThreeVector(0., 0., 1.);
+ 
+     /// Get time in milliseconds
+      pt::ptime date_ms=pt::microsec_clock::local_time();
+      long ms=date_ms.time_of_day().total_milliseconds();
 
+      gRandom->SetSeed(ms);
       G4double xx=gRandom->Uniform(-55,55);
       G4double yy=gRandom->Uniform(-70,150);
 
@@ -165,6 +171,72 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		  dynamic_cast<G4ParticleGun*>(particleGun)->GetParticlePosition().z());
       BeamInfo->SetPosition(tmp3);
       BeamInfo->SetIsBackground(false);
+      BeamInfo->SetIntermediate(NULL);
+
+      particleGun->GeneratePrimaryVertex(anEvent);
+    }else if(currentGeneratorName=="Single") {
+      G4ParticleTable* bTable=G4ParticleTable::GetParticleTable();
+      G4ParticleDefinition* beam=bTable->FindParticle(bParticle);
+      G4ThreeVector position;
+      G4ThreeVector direction;
+
+      position=G4ThreeVector(0., 0., 0.);
+
+      /// Get time in milliseconds
+      pt::ptime date_ms=pt::microsec_clock::local_time();
+      long ms=date_ms.time_of_day().total_milliseconds();
+
+      gRandom->SetSeed(ms);
+      G4double xx=gRandom->Uniform(-55,55);
+      G4double yy=gRandom->Uniform(-70,150);
+
+      while(!CheckHit(xx,yy,bPosition)) {
+	xx=gRandom->Uniform(-55,55);
+	yy=gRandom->Uniform(-70,150);
+      }
+
+      direction=G4ThreeVector(xx, yy, 1778.*CLHEP::cm);
+
+      particleGun=new G4ParticleGun(1);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleDefinition(beam);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticlePosition(position);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleMomentumDirection(direction);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleEnergy(bEnergy);
+
+      particleGun->GeneratePrimaryVertex(anEvent);
+    }else if(currentGeneratorName=="Generate") {
+      currentGenerator->GeneratePrimaryVertex(anEvent);
+      gprocess=dynamic_cast<HepMCG4AsciiReader*>(currentGenerator)->GetProcess();
+    }else if(currentGeneratorName=="Single") {
+      G4cout << __FILE__ << " " << __LINE__ << " HOGE " << G4endl;
+
+      G4ParticleTable* bTable=G4ParticleTable::GetParticleTable();
+      G4ParticleDefinition* beam=bTable->FindParticle(bParticle);
+      G4ThreeVector position;
+      G4ThreeVector direction;
+
+      position=G4ThreeVector(0.,0.,0.);
+ 
+      /// Get time in milliseconds
+      pt::ptime date_ms=pt::microsec_clock::local_time();
+      long ms=date_ms.time_of_day().total_milliseconds();
+
+      gRandom->SetSeed(ms);
+      G4double xx=gRandom->Uniform(-55,55);
+      G4double yy=gRandom->Uniform(-70,150);
+
+      while(!CheckHit(xx,yy,"UNIFORM")) {
+	xx=gRandom->Uniform(-55,55);
+	yy=gRandom->Uniform(-70,150);
+      }
+
+      direction=G4ThreeVector(xx,yy,17780);
+
+      particleGun=new G4ParticleGun(1);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleDefinition(beam);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticlePosition(position);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleMomentumDirection(direction);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleEnergy(bEnergy);
 
       particleGun->GeneratePrimaryVertex(anEvent);
     }else if(currentGeneratorName=="Generate") {
@@ -191,8 +263,10 @@ void RHICfPrimaryGeneratorAction::SetInput(TFile *afin)
   }else if(currentGeneratorName=="Response") {
     centralCont=new CentralContainer();
     forwardCont=new ForwardContainer();
+    bbcCont=new BBCContainer();
     tin->SetBranchAddress("central", &centralCont);
     tin->SetBranchAddress("forward", &forwardCont);
+    tin->SetBranchAddress("bbc", &bbcCont);
   }
 }
 

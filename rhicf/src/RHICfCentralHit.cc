@@ -23,7 +23,7 @@ RHICfCentralHit::RHICfCentralHit()
   Ekinetic=0;
   Position1=G4ThreeVector();
   Position2=G4ThreeVector();
-  Direction=G4ThreeVector();
+  Momentum=G4ThreeVector();
   isBoundary=false;
 }
 

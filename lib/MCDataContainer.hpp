@@ -15,10 +15,13 @@ public:
   std::vector<std::vector<std::vector<std::vector<double> > > > GetBarTruth();
   void SetPlateTruth(int atower, int aplate, double aedep);
   std::vector<std::vector<double> > GetPlateTruth();
+  void SetFCTruth(int atower, double aedep);
+  std::vector<double> GetFCTruth();
 
 private:
   std::vector<std::vector<std::vector<std::vector<double> > > > bar_truth;
   std::vector<std::vector<double> > plate_truth;
+  std::vector<double> fc_truth;
 
   ClassDef(MCDataContainer, 1)
 };

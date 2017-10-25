@@ -19,7 +19,7 @@ public:
 private:
   std::vector<Forward*> forwardCont;
 
-  ClassDef(ForwardContainer, 1)
+  ClassDef(ForwardContainer, 2)
 };
 
 #endif

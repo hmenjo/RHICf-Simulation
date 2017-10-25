@@ -10,6 +10,7 @@
 #include "ZDCContainer.hpp"
 #include "BBCContainer.hpp"
 #include "RomanPotContainer.hpp"
+#include "ReconstructContainer.hpp"
 
 class RHICfSimEvent: public TObject
 {
@@ -24,6 +25,7 @@ public:
   void SetZDC(ZDCContainer *azdc);
   void SetBBC(BBCContainer *abbc);
   void SetRomanPot(RomanPotContainer *aromanpot);
+  void SetReconstruct(ReconstructContainer *areconstruct);
 
   ForwardContainer* GetForward();
   CentralContainer* GetCentral();
@@ -32,6 +34,7 @@ public:
   ZDCContainer* GetZDC();
   BBCContainer* GetBBC();
   RomanPotContainer* GetRomanPot();
+  ReconstructContainer* GetReconstruct();
 
 private:
   ForwardContainer *forward;
@@ -41,8 +44,9 @@ private:
   ZDCContainer *zdc;
   BBCContainer *bbc;
   RomanPotContainer *romanpot;
+  ReconstructContainer *reconstruct;
 
-  ClassDef(RHICfSimEvent, 1)
+  ClassDef(RHICfSimEvent, 2)
 };
 
 #endif

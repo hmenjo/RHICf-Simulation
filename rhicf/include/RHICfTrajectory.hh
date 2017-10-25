@@ -43,6 +43,7 @@ public:
   virtual int GetPointEntries() const { return fPositionRecord->size(); }
   virtual G4VTrajectoryPoint* GetPoint(G4int i) const { return (*fPositionRecord)[i]; }
   virtual G4String GetProduction() const { return fProduction; }
+  virtual G4double GetMass() const { return fMass; }
 
 private:
   RHICfTrajectoryPointContainer* fPositionRecord;
@@ -57,6 +58,7 @@ private:
   G4ThreeVector                  fVertexPosition;
   G4double                       fGlobalTime;
   G4String                       fProduction;
+  G4double                       fMass;
 };
 
 extern G4ThreadLocal G4Allocator<RHICfTrajectory> * myTrajectoryAllocator;

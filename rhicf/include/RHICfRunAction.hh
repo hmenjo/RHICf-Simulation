@@ -43,6 +43,12 @@ public:
   void SetFlag_Detector(Flag aflag_detector) {flag_detector=aflag_detector;};
   void SetFlag_Original(Flag aflag_original) {flag_original=aflag_original;};
   void SetModel(G4String agenname) {genname=agenname;};
+  void SetCrossSection(double asigTot, double asigEla, double asigIne)
+  {
+    sigTot=asigTot;
+    sigEla=asigEla;
+    sigIne=asigIne;
+  };
 
   Flag GetFlag_Detector() {return flag_detector;};
   Flag GetFlag_Original() {return flag_original;};
@@ -69,6 +75,9 @@ private:
   Flag flag_original;
   Flag flag_merged;
   G4String genname;
+  double sigTot;
+  double sigEla;
+  double sigIne;
 
   RunInfo* runInfo;
   RHICfSimEvent* simEvent;

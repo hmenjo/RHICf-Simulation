@@ -58,12 +58,13 @@ G4bool RHICfForwardSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 
 
   RHICfForwardHit* ahit=new RHICfForwardHit();
+  RHICfForwardHit* ahit2=new RHICfForwardHit();
 
   ahit->SetPDGCode(track->GetDynamicParticle()->GetPDGcode());
   ahit->SetEnergy(track->GetTotalEnergy());
   ahit->SetEkinetic(track->GetKineticEnergy());
   ahit->SetPosition(postStepPoint->GetPosition());
-  ahit->SetDirection(postStepPoint->GetMomentumDirection());
+  ahit->SetMomentum(postStepPoint->GetMomentum());
 
   G4int motherID=track->GetParentID();
   G4int tmp_motherID=motherID;
@@ -81,6 +82,30 @@ G4bool RHICfForwardSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
   while(motherID!=0) {
     tmp_motherID=motherID;
     RHICfTrajectory* parentTrajectory=GetParentTrajectory(motherID);
+
+    for(int i=0; i<parentTrajectory->GetPointEntries(); i++) {
+      if(parentTrajectory->GetPoint(i)->GetPosition().z()>980*CLHEP::cm) {
+	/*
+	G4cout << track->GetTrackID() <<  " " << i << " "
+	       << parentTrajectory->GetTrackID() << " "
+	       << parentTrajectory->GetPDGEncoding() << " "
+	       << parentTrajectory->GetInitialMomentum().mag()/CLHEP::GeV << " "
+	       << parentTrajectory->GetPoint(i)->GetPosition().x() << " "
+	       << parentTrajectory->GetPoint(i)->GetPosition().y() << " "
+	       << parentTrajectory->GetPoint(i)->GetPosition().z()/CLHEP::cm << " "
+	       << G4endl;
+	*/
+	G4double ene=sqrt(parentTrajectory->GetInitialMomentum().mag2()+
+			  pow(parentTrajectory->GetMass(),2));
+	ahit2->SetPDGCode(parentTrajectory->GetPDGEncoding());
+	ahit2->SetEkinetic(parentTrajectory->GetInitialMomentum().mag());
+	ahit2->SetEnergy(ene);
+	ahit2->SetPosition(parentTrajectory->GetPoint(i)->GetPosition());
+	ahit2->SetMomentum(parentTrajectory->GetInitialMomentum());
+
+	ahit2->SetisIntermediate(true);
+      }
+    }
     if(parentTrajectory==0) break;
     proc=parentTrajectory->GetProduction();
     motherID=parentTrajectory->GetParentID();
@@ -90,6 +115,10 @@ G4bool RHICfForwardSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
   ahit->SetMotherID(tmp_motherID);
   ahit->SetisBackground(isbkg);
 
+  if(ahit2->GetisIntermediate()) {
+    ahit2->SetMotherID(tmp_motherID);
+    hitsColl->insert(ahit2);
+  }
   hitsColl->insert(ahit);
 
   return true;

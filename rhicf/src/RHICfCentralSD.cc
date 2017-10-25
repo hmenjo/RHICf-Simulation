@@ -38,9 +38,32 @@ void RHICfCentralSD::Initialize(G4HCofThisEvent* HCTE)
 /// ProcessHits
 G4bool RHICfCentralSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 {
+
   /// Retrieve track information
   const G4StepPoint* preStepPoint  = astep->GetPreStepPoint();
   const G4StepPoint* postStepPoint = astep->GetPostStepPoint();
+
+  G4double rad=3*CLHEP::cm;
+
+  G4ThreeVector pos1=preStepPoint->GetPosition();
+  if(pos1.mag()>rad) return true;
+
+  G4ThreeVector pos2=postStepPoint->GetPosition();
+
+  /// Calculate pos2
+  G4bool isBoundary=false;
+  if(pos2.mag()>=rad) {
+    G4ThreeVector vec12=pos2-pos1;
+    G4ThreeVector vec1C=-1*pos1;
+    G4double theta1=(vec1C*vec12)/(vec1C.mag()*vec12.mag());
+    G4double thetaG=asin(vec1C.mag()*sin(theta1)/rad);
+    G4double dis=vec1C.mag()*cos(theta1)+rad*cos(thetaG);
+
+    pos2=pos1+vec12.unit()*dis;
+
+    isBoundary=true;
+  }
+
   G4Track* track=astep->GetTrack();
 
   RHICfCentralHit* ahit=new RHICfCentralHit();
@@ -49,12 +72,16 @@ G4bool RHICfCentralSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
   ahit->SetPDGCode(track->GetDynamicParticle()->GetPDGcode());
   ahit->SetEnergy(track->GetTotalEnergy());
   ahit->SetEkinetic(track->GetKineticEnergy());
-  ahit->SetPosition1(preStepPoint->GetPosition());
-  ahit->SetPosition2(postStepPoint->GetPosition());
-  ahit->SetDirection(postStepPoint->GetMomentumDirection());
-  G4bool isBoundary=false;
-  if(!(postStepPoint->GetPhysicalVolume()) ||
-     preStepPoint->GetPhysicalVolume()!=postStepPoint->GetPhysicalVolume())
+  //  ahit->SetPosition1(preStepPoint->GetPosition());
+  //  ahit->SetPosition2(postStepPoint->GetPosition());
+  ahit->SetPosition1(pos1);
+  ahit->SetPosition2(pos2);
+  ahit->SetMomentum(postStepPoint->GetMomentum());
+  /// For GENERATE mode
+  if(!isBoundary && 
+     preStepPoint->GetPhysicalVolume()->GetName()=="Vol-central_PV" &&
+     (!(postStepPoint->GetPhysicalVolume()) ||
+      postStepPoint->GetPhysicalVolume()!=preStepPoint->GetPhysicalVolume()))
     isBoundary=true;
   ahit->SetisBoundary(isBoundary);
 

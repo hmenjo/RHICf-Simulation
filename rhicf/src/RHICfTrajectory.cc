@@ -25,6 +25,7 @@ RHICfTrajectory::RHICfTrajectory(const G4Track* aTrack): G4VTrajectory(), fPosit
   fParticleName=fParticleDefinition->GetParticleName();
   fPDGCharge=fParticleDefinition->GetPDGCharge();
   fPDGEncoding=fParticleDefinition->GetPDGEncoding();
+  fMass=fParticleDefinition->GetPDGMass();
   if(fParticleName=="unknown") {
     G4PrimaryParticle*pp=aTrack->GetDynamicParticle()->GetPrimaryParticle();
     if(pp) {

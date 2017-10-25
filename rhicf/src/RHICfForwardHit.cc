@@ -21,8 +21,9 @@ RHICfForwardHit::RHICfForwardHit()
   Energy=0;
   Ekinetic=0;
   Position=G4ThreeVector();
-  Direction=G4ThreeVector();
+  Momentum=G4ThreeVector();
   isBackground=false;
+  isIntermediate=false;
 }
 
 RHICfForwardHit::~RHICfForwardHit()

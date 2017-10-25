@@ -16,12 +16,14 @@ public:
   void SetMomentum(TLorentzVector amomentum);
   void SetPosition(TVector3 aposition);
   void SetIsBackground(bool abackground);
+  void SetIntermediate(Forward* aintermediate);
 
   int GetMotherID();
   int GetPDGcode();
   TLorentzVector GetMomentum();
   TVector3 GetPosition();
   bool IsBackground();
+  Forward* GetIntermediate();
 
 private:
   int motherid;
@@ -29,8 +31,9 @@ private:
   TLorentzVector momentum;
   TVector3 position;
   bool isbackground;
+  Forward* intermediate;
 
-  ClassDef(Forward, 1)
+  ClassDef(Forward, 2)
 };
 
 #endif

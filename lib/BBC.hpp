@@ -17,15 +17,15 @@ public:
   void Reset();
   void SetEdep(double aedep);
   //  void Push_back(BBCParticle* abbcparticle);
-  void SetHit(std::vector<BBCParticle*> abbchit);
+  //  void SetHit(std::vector<BBCParticle*> abbchit);
   double GetEdep();
-  std::vector<BBCParticle*> GetHit();
+  //  std::vector<BBCParticle*> GetHit();
 
 private:
   double edep;
-  std::vector<BBCParticle*> bbchit;
+  //  std::vector<BBCParticle*> bbchit;
 
-  ClassDef(BBC, 1)
+  ClassDef(BBC, 2)
 };
 
 #endif

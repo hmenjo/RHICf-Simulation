@@ -54,9 +54,6 @@ void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
   RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
   flag_detector=fDetector->GetDetectorFlag();
 
-  double sigTot;
-  double sigEla;
-  double sigIne;
   if(flag_detector.check(bGENERATE)) {
     std::stringstream srun;
     srun << nrun;
@@ -66,12 +63,13 @@ void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
     /// Create HepMC file with generator
     if(genname=="EPOS_LHC"    || genname=="EPOS_1.99" ||
        genname=="QGSJETII-04" || genname=="QGSJETII-03" ||
-       genname=="DPMJet3.0-6") {  /// Call CRMC with system function
+       genname=="DPMJet3.0-6" || genname=="Sibyll_2.3") {  /// Call CRMC with system function
       if(genname=="EPOS_LHC")         model="0";
       else if(genname=="EPOS_1.99")   model="1";
       else if(genname=="QGSJETII-04") model="7";
       else if(genname=="QGSJETII-03") model="11";
-      else if(genname=="DPMJet3.0-6")  model="12";
+      else if(genname=="DPMJet3.0-6") model="12";
+      else if(genname=="Sibyll_2.3")  model="6";
 
       std::stringstream sevent;
       sevent << nevent;
@@ -151,7 +149,7 @@ void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
 
       /// Generate collisions
       system(command.c_str());
-    }else if(genname=="Pythia8.215") {
+    }else if(genname=="Pythia8.219") {
       Pythia8::Pythia pythia;
 
       // Read in commands from external file.
@@ -244,15 +242,114 @@ void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
 
 	if(i==0) sigEla=pythia.info.sigmaGen();
 	else     sigIne=pythia.info.sigmaGen();
+
+	
+      }
+      sigTot=sigEla+sigIne;
+    }else if(genname=="Elastic") {
+      // Read in commands from external file.
+      std::stringstream sevent;
+      sevent << nevent;
+      for(int i=0; i<2; i++) {
+	Pythia8::Pythia pythia;
+	if(i==0) { /// elastic
+	  if(seed2==-1) {
+	    pt::ptime date_ms=pt::microsec_clock::local_time();
+	    long ms=date_ms.time_of_day().total_milliseconds();
+	    rn::mt19937 rng(static_cast<unsigned long>(ms));
+	    rn::uniform_int_distribution<> seed2_pythia(1, 900000000);
+	    rn::variate_generator< rn::mt19937, rn::uniform_int_distribution<> > mt(rng, seed2_pythia);
+	    seed2 =mt();
+	  }
+	  pythia.readString("Main:timesAllowErrors = 10");
+	  //    pythia.readString("SoftQCD:all = on");
+	  pythia.readString("SoftQCD:elastic = off");
+	  pythia.readString("SoftQCD:singleDiffractive = on");
+	  pythia.readString("SoftQCD:doubleDiffractive = on");
+	  pythia.readString("SoftQCD:centralDiffractive = on");
+	  pythia.readString("SoftQCD:nonDiffractive = on");
+	  pythia.readString("SoftQCD:inelastic = on");
+	}else{ /// inelastic
+	  pythia.readString(("Main:timesAllowErrors = "+sevent.str()).c_str());
+	  pythia.readString("SoftQCD:elastic = on");
+	  pythia.readString("SoftQCD:singleDiffractive = off");
+	  pythia.readString("SoftQCD:doubleDiffractive = off");
+	  pythia.readString("SoftQCD:centralDiffractive = off");
+	  pythia.readString("SoftQCD:nonDiffractive = off");
+	  pythia.readString("SoftQCD:inelastic = off");
+	}
+
+	pythia.readString(("Main:numberOfEvents = "+sevent.str()).c_str());
+	pythia.readString("Init:showChangedSettings = on");
+	pythia.readString("Init:showChangedParticleData = off");
+	pythia.readString("Next:numberCount = 10");
+	pythia.readString("Next:numberShowInfo = 0");
+	pythia.readString("Next:numberShowProcess = 0");
+	pythia.readString("Next:numberShowEvent = 0");
+	pythia.readString("Beams:frameType = 3");
+	pythia.readString("Beams:idA = 2212");
+	pythia.readString("Beams:idB = 2212");
+	pythia.readString("Beams:pzA = 255.");
+	pythia.readString("Beams:pzB = -255.");
+	pythia.readString("Diffraction:PomFlux = 5");
+	pythia.readString("MultipartonInteractions:pT0Ref = 1.");
+	pythia.readString("MultipartonInteractions:ecmRef = 100.");
+	pythia.readString("MultipartonInteractions:ecmPow = 0.16");
+	pythia.readString("MultipartonInteractions:pTmin = 0.01");
+	pythia.readString("MultipartonInteractions:bProfile = 3");
+	//    pythia.readString("MultipartonInteractions:coreRadius = 0.4");
+	//    pythia.readString("MultipartonInteractions:coreFraction = 0.5");
+	pythia.readString("MultipartonInteractions:expPow = 1.");
+	pythia.readString("ParticleDecays:limitTau0 = on");
+	pythia.readString("ParticleDecays:tau0Max = 0");
+	pythia.readString("Check:abortIfVeto = off");
+	pythia.readString("Random:setSeed = on");
+	ostringstream Seed;
+	Seed<<"Random:seed = "<<seed2;
+	pythia.readString(Seed.str());
+
+	int nEvent=pythia.mode("Main:numberOfEvents");
+	int nAbort=pythia.mode("Main:timesAllowErrors");
+
+	std::ofstream output(ftmp.c_str());
+	HepMC::IO_GenEvent ascii_io(output);
+
+	pythia.init();
+
+	int iAbort=0;
+	for(int iEvent=0; iEvent<nEvent; ++iEvent) {
+	  if(!pythia.next()) {
+	    if(pythia.info.atEndOfFile()) {
+	      G4cout << " Aborted since reached end of Les Houches Event File" << G4endl;
+	      break;
+	    }
+	    if(++iAbort < nAbort) continue;
+	    G4cout << " Event generation aborted prematurely, owing to error!" << G4endl;
+	    break;
+	  }
+	  HepMC::GenEvent* hepmcevt=new HepMC::GenEvent();
+	  HepMC::Pythia8ToHepMC ToHepMC;
+	  ToHepMC.fill_next_event(pythia, hepmcevt, iEvent);
+	  ascii_io << hepmcevt;
+	  //      ascii_io.print();
+	  delete hepmcevt;
+	}
+	pythia.stat();
+
+	if(i==0) sigIne=pythia.info.sigmaGen();
+	else     sigEla=pythia.info.sigmaGen();
       }
       sigTot=sigEla+sigIne;
     }
 
-
-    genAction->SetGenerator("Generate");
-    HepMCG4AsciiReader* hepMC=dynamic_cast<HepMCG4AsciiReader*>(genAction->GetGenerator());
-    hepMC->SetFileName(ftmp);
-    hepMC->Initialize();
+    if(genname=="Single") {
+      genAction->SetGenerator("Single");
+    }else{
+      genAction->SetGenerator("Generate");
+      HepMCG4AsciiReader* hepMC=dynamic_cast<HepMCG4AsciiReader*>(genAction->GetGenerator());
+      hepMC->SetFileName(ftmp);
+      hepMC->Initialize();
+    }
 
     flag_merged=flag_detector;
   }
@@ -280,6 +377,17 @@ void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
   runInfo->SetSigEla(sigEla);
   runInfo->SetSigIne(sigIne);
   ///
+
+  if(1) {
+    G4cout << "Input options check1" << G4endl;
+    G4cout << "FULL:          " << flag_merged.equal(bFULL)          << G4endl;
+    G4cout << "GENERATE:      " << flag_merged.check(bGENERATE)      << G4endl;
+    G4cout << "TRANSPORT:     " << flag_merged.check(bTRANSPORT)     << G4endl;
+    G4cout << "RESPONSE_ARM1: " << flag_merged.check(bRESPONSE_ARM1) << G4endl;
+    G4cout << "RESPONSE_ZDC:  " << flag_merged.check(bRESPONSE_ZDC)  << G4endl;
+    G4cout << "BEAMTEST:      " << flag_merged.check(bBEAMTEST)      << G4endl;
+  }
+
   tevent->Branch("SimEvent", &simEvent);
 }
 

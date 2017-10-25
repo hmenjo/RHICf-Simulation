@@ -38,8 +38,8 @@ public:
   G4ThreeVector GetPosition1() const {return Position1;};
   void SetPosition2(G4ThreeVector aPosition2) {Position2=aPosition2;};
   G4ThreeVector GetPosition2() const {return Position2;};
-  void SetDirection(G4ThreeVector aDirection) {Direction=aDirection;};
-  G4ThreeVector GetDirection() const {return Direction;};
+  void SetMomentum(G4ThreeVector aMomentum) {Momentum=aMomentum;};
+  G4ThreeVector GetMomentum() const {return Momentum;};
   void SetisBoundary(G4bool aisBoundary) {isBoundary=aisBoundary;};
   G4bool GetisBoundary() const {return isBoundary;};
   
@@ -55,7 +55,7 @@ private:
   G4double Ekinetic;
   G4ThreeVector Position1;
   G4ThreeVector Position2;
-  G4ThreeVector Direction;
+  G4ThreeVector Momentum;
   G4bool isBoundary;
 };
 
@@ -70,7 +70,7 @@ inline RHICfCentralHit::RHICfCentralHit(const RHICfCentralHit& right): G4VHit()
   Ekinetic=right.Ekinetic;
   Position1=right.Position1;
   Position2=right.Position2;
-  Direction=right.Direction;
+  Momentum=right.Momentum;
   isBoundary=right.isBoundary;
 }
 
@@ -83,7 +83,7 @@ inline const RHICfCentralHit& RHICfCentralHit::operator=(const RHICfCentralHit& 
   Ekinetic=right.Ekinetic;
   Position1=right.Position1;
   Position2=right.Position2;
-  Direction=right.Direction;
+  Momentum=right.Momentum;
   isBoundary=right.isBoundary;
   return *this;
 }

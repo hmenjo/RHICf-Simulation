@@ -20,7 +20,7 @@ public:
 private:
   std::vector< std::vector<BBC*> > bbcCont;
 
-  ClassDef(BBCContainer, 1)
+  ClassDef(BBCContainer, 2)
 };
 
 #endif

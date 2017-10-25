@@ -20,14 +20,19 @@ public:
 
   void SetPlate(int atower, int aplate, double aedep);
   void SetBar(int atower, int abelt, int axy, int abar, double aedep);
-  void SetUnused(int abelt, int axy, int aunused, double aedep);
+  //  void SetUnused(int abelt, int axy, int aunused, double aedep);
   std::vector<std::vector<double> > GetPlate();
   std::vector<std::vector<std::vector<std::vector<double> > > > GetBar();
-  std::vector<std::vector<std::vector<double> > > GetUnused();
+  //  std::vector<std::vector<std::vector<double> > > GetUnused();
+  void SetFC(int atower, double aedep);
+  std::vector<double> GetFC();
 private:
+
+protected:
   std::vector<std::vector<double> > plate;
   std::vector<std::vector<std::vector<std::vector<double> > > > bar;
-  std::vector<std::vector<std::vector<double> > > unused;
+  //  std::vector<std::vector<std::vector<double> > > unused;
+  std::vector<double> fc;
 
   ClassDef(RecoDataContainer, 1)
 };

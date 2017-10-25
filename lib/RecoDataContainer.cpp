@@ -30,6 +30,7 @@ void RecoDataContainer::Reset()
     }
   }
 
+  /*
   unused.clear();
   unused.resize(nbelt);
   for(int ibelt=0; ibelt<nbelt; ibelt++) {
@@ -38,7 +39,12 @@ void RecoDataContainer::Reset()
       unused[ibelt][ixy].resize(nunused);
     }
   }
+  */
+
+  fc.clear();
+  fc.resize(ntower);
 }
+
 
 
 int RecoDataContainer::GetMaxBar(int atower, int abelt, int axy)
@@ -98,10 +104,12 @@ void RecoDataContainer::SetBar(int atower, int abelt, int axy, int abar, double 
   bar[atower][abelt][axy][abar]=aedep;
 }
 
+/*
 void RecoDataContainer::SetUnused(int abelt, int axy, int aunused, double aedep)
 {
   unused[abelt][axy][aunused]=aedep;
 }
+*/
 
 std::vector<std::vector<double> > RecoDataContainer::GetPlate()
 {
@@ -113,7 +121,19 @@ std::vector<std::vector<std::vector<std::vector<double> > > > RecoDataContainer:
   return bar;
 }
 
+/*
 std::vector<std::vector<std::vector<double> > > RecoDataContainer::GetUnused()
 {
   return unused;
+}
+*/
+
+void RecoDataContainer::SetFC(int atower, double aedep)
+{
+  fc[atower]=aedep;
+}
+
+std::vector<double> RecoDataContainer::GetFC()
+{
+  return fc;
 }

@@ -27,6 +27,7 @@
 #include "RHICfForwardSD.hh"
 #include "RHICfGSOplateSD.hh"
 #include "RHICfGSObarSD.hh"
+#include "RHICfFCSD.hh"
 #include "RHICfZDCSD.hh"
 #include "RHICfSMDSD.hh"
 #include "RHICfScinSD.hh"
@@ -94,6 +95,8 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     if((*it)->GetName()=="Vol-gsobar-small_PV") (*it)->SetCopyNo(ibarsmall++);
     if((*it)->GetName()=="Vol-gsobelt-large_PV") (*it)->SetCopyNo(ixylarge++);
     if((*it)->GetName()=="Vol-gsobar-large_PV") (*it)->SetCopyNo(ibarlarge++);
+    if((*it)->GetName()=="Vol-frontcounter-small_PV") (*it)->SetCopyNo(0);
+    if((*it)->GetName()=="Vol-frontcounter-large_PV") (*it)->SetCopyNo(1);
 
     if((*it)->GetName()=="Vol-fibr_PV") (*it)->SetCopyNo(ifibr++);
     if((*it)->GetName()=="Vol-gapf_PV") (*it)->SetCopyNo(igapf++);
@@ -138,6 +141,8 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     RHICfGSObarSD* GSObarSD = new RHICfGSObarSD("GSObar");
     GSObarSD->SetTables(ftables);
     SDman->AddNewDetector(GSObarSD);
+    RHICfFCSD* FCSD = new RHICfFCSD("FC");
+    SDman->AddNewDetector(FCSD);
   }
   if(flag.check(bRESPONSE_ZDC)) {
     RHICfZDCSD* ZDCSD = new RHICfZDCSD("ZDC");

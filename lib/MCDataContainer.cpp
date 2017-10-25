@@ -32,6 +32,9 @@ void MCDataContainer::Reset()
   for(int itower=0; itower<ntower; itower++) {
     plate_truth[itower].resize(nplate);
   }
+
+  fc_truth.clear();
+  fc_truth.resize(ntower);
 }
 
 void MCDataContainer::SetBarTruth(int atower, int abelt, int axy, int abar, double aedep)
@@ -52,5 +55,15 @@ void MCDataContainer::SetPlateTruth(int atower, int aplate, double aedep)
 std::vector<std::vector<double> > MCDataContainer::GetPlateTruth()
 {
   return plate_truth;
+}
+
+void MCDataContainer::SetFCTruth(int atower, double aedep)
+{
+  fc_truth[atower]=aedep;
+}
+
+std::vector<double> MCDataContainer::GetFCTruth()
+{
+  return fc_truth;
 }
 

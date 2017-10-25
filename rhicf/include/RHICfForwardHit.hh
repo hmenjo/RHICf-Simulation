@@ -34,10 +34,12 @@ public:
   G4double GetEkinetic() const {return Ekinetic;};
   void SetPosition(G4ThreeVector aPosition) {Position=aPosition;};
   G4ThreeVector GetPosition() const {return Position;};
-  void SetDirection(G4ThreeVector aDirection) {Direction=aDirection;};
-  G4ThreeVector GetDirection() const {return Direction;};
+  void SetMomentum(G4ThreeVector aMomentum) {Momentum=aMomentum;};
+  G4ThreeVector GetMomentum() const {return Momentum;};
   void SetisBackground(G4bool aisBackground) {isBackground=aisBackground;};
   G4bool GetisBackground() const {return isBackground;};
+  void SetisIntermediate(G4bool aisIntermediate) {isIntermediate=aisIntermediate;};
+  G4bool GetisIntermediate() const {return isIntermediate;};
   
   /// Methods
   virtual void Draw();
@@ -49,8 +51,9 @@ private:
   G4double Energy;
   G4double Ekinetic;
   G4ThreeVector Position;
-  G4ThreeVector Direction;
+  G4ThreeVector Momentum;
   G4bool isBackground;
+  G4bool isIntermediate;
 };
 
 /////////
@@ -62,8 +65,9 @@ inline RHICfForwardHit::RHICfForwardHit(const RHICfForwardHit& right): G4VHit()
   Energy=right.Energy;
   Ekinetic=right.Ekinetic;
   Position=right.Position;
-  Direction=right.Direction;
+  Momentum=right.Momentum;
   isBackground=right.isBackground;
+  isIntermediate=right.isIntermediate;
 }
 
 inline const RHICfForwardHit& RHICfForwardHit::operator=(const RHICfForwardHit& right)
@@ -73,8 +77,9 @@ inline const RHICfForwardHit& RHICfForwardHit::operator=(const RHICfForwardHit& 
   Energy=right.Energy;
   Ekinetic=right.Ekinetic;
   Position=right.Position;
-  Direction=right.Direction;
+  Momentum=right.Momentum;
   isBackground=right.isBackground;
+  isIntermediate=right.isIntermediate;
   return *this;
 }
 

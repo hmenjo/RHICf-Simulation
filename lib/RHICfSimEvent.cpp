@@ -9,6 +9,7 @@ RHICfSimEvent::RHICfSimEvent()
   zdc=NULL;
   bbc=NULL;
   romanpot=NULL;
+  reconstruct=NULL;
 }
 
 RHICfSimEvent::~RHICfSimEvent()
@@ -29,6 +30,8 @@ void RHICfSimEvent::SetBBC(BBCContainer *abbc)
 { bbc=abbc; }
 void RHICfSimEvent::SetRomanPot(RomanPotContainer *aromanpot)
 { romanpot=aromanpot; }
+void RHICfSimEvent::SetReconstruct(ReconstructContainer *areconstruct)
+{ reconstruct=areconstruct; }
 
 
 ForwardContainer* RHICfSimEvent::GetForward()
@@ -45,3 +48,5 @@ BBCContainer* RHICfSimEvent::GetBBC()
 { return bbc; }
 RomanPotContainer* RHICfSimEvent::GetRomanPot()
 { return romanpot; }
+ReconstructContainer* RHICfSimEvent::GetReconstruct()
+{ return reconstruct; }

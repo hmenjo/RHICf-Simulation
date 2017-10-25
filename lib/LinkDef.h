@@ -24,6 +24,9 @@
 #pragma link C++ class RomanPot;
 #pragma link C++ class RomanPotContainer;
 
+#pragma link C++ class Reconstruct;
+#pragma link C++ class ReconstructContainer;
+
 #pragma link C++ class Flag;
 
 #endif

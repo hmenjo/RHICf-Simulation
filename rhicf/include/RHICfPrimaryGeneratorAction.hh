@@ -35,6 +35,7 @@ public:
   G4VPrimaryGenerator* GetHepMCReader() {return hepmcAscii;};
   CentralContainer* GetCentral() {return centralCont;};
   ForwardContainer* GetForward() {return forwardCont;};
+  BBCContainer* GetBBC() {return bbcCont;};
   std::multimap<G4int, G4int> GetCentralID() {return CentralID;};
 
   G4int GetProcess() {return gprocess;};
@@ -60,6 +61,7 @@ private:
   std::vector<Forward*> forward;
   ForwardContainer *forwardCont;
   std::multimap<G4int, G4int> CentralID; // 1st: New TrackID; 2nd: Original TrackID
+  BBCContainer *bbcCont;
 
   G4int gprocess;
 
