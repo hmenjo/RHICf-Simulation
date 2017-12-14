@@ -411,7 +411,7 @@ int main(int argc,char** argv)
   }else if(fmodel=="Single") {
     bParticle=vm["BEAM"].as<std::string>();
     bEnergy=vm["EBEAM"].as<double>();
-    bPosition="UNIFORM";
+    bPosition=vm["PBEAM"].as<std::string>();
     seed2=0;
     dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("Single");
     dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetBeam(bParticle,bEnergy*CLHEP::GeV,bPosition,DetPosition);
