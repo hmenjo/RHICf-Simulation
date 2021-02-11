@@ -12,16 +12,21 @@ FULL_POS1           full_pos1.gdml             0    bFULL
 FULL_POS2           full_pos2.gdml            10    bFULL
 FULL_POS3           full_pos3.gdml            20    bFULL
 FULL_POS4           full_pos4.gdml         -47.4    bFULL
+FULL_POS5           full_pos5.gdml          16.5    bFULL
+
+FULL_TS             full_ts.gdml               0    bFULL
+FULL_TS_woZDC       full_ts_woZDC.gdml         0    bFULL
+FULL_TS_woZDC_adhoc full_ts_woZDC_adhoc_pipe.gdml  0  bFULL
+FULL_TS_adhoc       full_ts_adhoc_pipe_wo_BBC_DXmagnet.gdml    0  bFULL
+FULL_TL             full_tl.gdml           -47.4    bFULL
+FULL_TL_woZDC_adhoc full_tl_woZDC_adhoc_pipe.gdml  -47.4  bFULL
+FULL_TOP            full_top.gdml           24.0    bFULL
+FULL_TOP_woZDC_adhoc full_top_woZDC_adhoc_pipe.gdml  24.0  bFULL
 
 FULL_NOPIPE_POS1    full_nopipe_pos1.gdml      0    bFULL
 FULL_NOPIPE_POS2    full_nopipe_pos2.gdml     10    bFULL
 FULL_NOPIPE_POS3    full_nopipe_pos3.gdml     20    bFULL
 FULL_NOPIPE_POS4    full_nopipe_pos4.gdml  -47.4    bFULL
-FULL_NOPIPE_POS5    full_nopipe_pos4.gdml   16.5    bFULL
-
-FULL_TS             full_ts.gdml               0    bFULL
-FULL_TL             full_tl.gdml           -47.4    bFULL
-FULL_TOP            full_top.gdml           24.0    bFULL
 
 BEAMTEST_ARM1       beamtest_arm1.gdml         0    bBEAMTEST_ARM1
 BEAMTEST_ZDC        beamtest_zdc.gdml          0    bBEAMTEST_ZDC
@@ -30,3 +35,5 @@ BEAMTEST_POS1       beamtest_pos1.gdml         0    bBEAMTEST_ALL
 BEAMTEST_POS2       beamtest_pos2.gdml        10    bBEAMTEST_ALL
 BEAMTEST_POS3       beamtest_pos3.gdml        20    bBEAMTEST_ALL
 BEAMTEST_POS4       beamtest_pos4.gdml     -47.4    bBEAMTEST_ALL
+
+FULL_GARAGE         full_garage.gdml          70    bFULL

@@ -19,6 +19,7 @@ RHICfTrackingAction::~RHICfTrackingAction()
 /// PreUserTrackingAction
 void RHICfTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
+  //G4cerr << "RHICfPreUserTrackingAction " << G4endl;
   fpTrackingManager->SetStoreTrajectory(true);
   fpTrackingManager->SetTrajectory(new RHICfTrajectory(aTrack));
 }

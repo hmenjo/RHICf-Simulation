@@ -27,13 +27,14 @@
 #include "RHICfForwardSD.hh"
 #include "RHICfGSOplateSD.hh"
 #include "RHICfGSObarSD.hh"
+#include "RHICfBEAMPIPESD.hh"
 #include "RHICfFCSD.hh"
 #include "RHICfZDCSD.hh"
 #include "RHICfSMDSD.hh"
 #include "RHICfScinSD.hh"
 #include "RHICfBBCSD.hh"
 
-#include "RHICfParam.hpp"
+#include "../../lib/RHICfParam.hpp"
 
 RHICfDetectorConstruction::RHICfDetectorConstruction(): G4VUserDetectorConstruction()
 {
@@ -53,7 +54,6 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
   //  G4LogicalSkinSurface::CleanSurfaceTable();
   //  G4LogicalBorderSurface::CleanSurfaceTable();
   //  G4SurfaceProperty::CleanSurfacePropertyTable();
-
   G4VPhysicalVolume* fWorldPhysVol;
   parser.Read(fReadFile);
 
@@ -77,7 +77,8 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
 
   /// Set sensitive detector
   /// Set numbers for copy volumes
-  int ifibr=0, igapf=0, izdc=0;
+  int ifibr=0, igapf=0; 
+  //int izdc=0;
   int ismdh=0, ismdv=0;
   int ismdh_star=0, ismdv_star=0;
   int ilplate=0;
@@ -86,8 +87,15 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
   int ibbc=0;
   G4PhysicalVolumeStore* pvs=G4PhysicalVolumeStore::GetInstance();
   for(G4PhysicalVolumeStore::iterator it=pvs->begin(); it!=pvs->end(); it++){
-    if(0) G4cout << (*it)->GetName() << G4endl;
+    //if(0) G4cout << (*it)->GetName() << G4endl;
+    
 
+    //G4cout << "+++++++++++++++++++++++++++++++++++++++++++++"<< G4endl;
+    //G4cout << (*it)->GetName() << G4endl;
+    //G4cout << "+++++++++++++++++++++++++++++++++++++++++++++"<< G4endl;
+
+
+  
     if((*it)->GetName()=="Vol-holder-scintillator-gso-assembly_PV") (*it)->SetCopyNo(ilplate++);
     if((*it)->GetName()=="Vol-gsobar-holder-assembly_PV") (*it)->SetCopyNo(ilbar++);
     if((*it)->GetName()=="Vol-gsobelt-holder-assembly_PV") (*it)->SetCopyNo(ilbar++);
@@ -100,7 +108,7 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
 
     if((*it)->GetName()=="Vol-fibr_PV") (*it)->SetCopyNo(ifibr++);
     if((*it)->GetName()=="Vol-gapf_PV") (*it)->SetCopyNo(igapf++);
-    if((*it)->GetName()=="Vol-zdc_PV")  (*it)->SetCopyNo(izdc++);
+    //if((*it)->GetName()=="Vol-zdc_PV")  (*it)->SetCopyNo(izdc++);
     /// STAR SMD
     if((*it)->GetName()=="Vol-smdh-strip_PV") (*it)->SetCopyNo(ismdh_star++);
     if((*it)->GetName()=="Vol-smdv-strip_PV") (*it)->SetCopyNo(ismdv_star++);
@@ -111,8 +119,8 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     if((*it)->GetName()=="Vol-rcsc_PV") (*it)->SetCopyNo(1);
 
     if((*it)->GetName()=="Vol-upstream-section_PV") (*it)->SetCopyNo(iside++); /// 0:eta>0/1:eta<0
-    if((*it)->GetName()=="Vol-bbc-tile-small_PV")   (*it)->SetCopyNo(ibbc++); /// 0-15
-    if((*it)->GetName()=="Vol-bbc-tile-large_PV")   (*it)->SetCopyNo(ibbc++); /// 16-31
+    if((*it)->GetName()=="Vol-bbc-tile-small_PV")   (*it)->SetCopyNo(ibbc++); /// 0-15 comment out by satoken
+    if((*it)->GetName()=="Vol-bbc-tile-large_PV")   (*it)->SetCopyNo(ibbc++); /// 16-31 comment out by satoken
   }
 
 
@@ -131,9 +139,29 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
   if(flag.check(bTRANSPORT)) {
     RHICfForwardSD* ForwardSD = new RHICfForwardSD("Forward");
     SDman->AddNewDetector(ForwardSD);
-    RHICfBBCSD* BBCSD = new RHICfBBCSD("BBC");
-    SDman->AddNewDetector(BBCSD);
+    RHICfBEAMPIPESD* BeamPipeSD = new RHICfBEAMPIPESD("BeamPipe");
+    SDman->AddNewDetector(BeamPipeSD);
+
+    const G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
+    std::vector<G4LogicalVolume*>::const_iterator lvcite;
+    G4String lvn;
+    for(lvcite=lvs->begin(); lvcite!=lvs->end(); lvcite++) {
+      lvn = (*lvcite)->GetSolid()->GetName();
+      if((lvn=="Log-3in-pipe-beryllium") || (lvn=="Log-3in-pipe-Iron") || (lvn=="Log-central") ||(lvn=="Log-3in-flange1") ||(lvn=="Log-3in-flange2") ||(lvn=="Log-3in-flange3") ||(lvn=="Log-3in-cone") ||(lvn=="Log-bbc-tile-small") ||(lvn=="Log-bbc-tile-large") ||(lvn=="Log-BBC") ||(lvn=="Log-5in-pipe") ||(lvn=="Log-5in-flange1") ||(lvn=="Log-5in-flange2") ||(lvn=="Log-5in-flange3") ||(lvn=="Log-5in-flange4") ||(lvn=="Log-5in-flange5") ||(lvn=="Log-5in-flange6") ||(lvn=="Log-DXmagnet-5in-pipe1") ||(lvn=="Log-DXmagnet-5in-pipe2") ||(lvn=="Log-DXmagnet-5in-pipe3") ||(lvn=="Log-DXmagnet-5in-cone") ||(lvn=="Log-DXmagnet-5.5in-pipe") ||(lvn=="Log-DXmagnet-5.5in-cone") ||(lvn=="Log-DXmagnet-12in-pipe") ||(lvn=="Log-DXmagnet-flange1") ||(lvn=="Log-DXmagnet-flange2") ||(lvn=="Log-DXvessel-front-flange") ||(lvn=="Log-DXvessel-front") ||(lvn=="Log-DXvessel-rear-flange") ||(lvn=="Log-DXvessel-rear") ||(lvn=="Log-DXvessel-inner") ||(lvn=="Log-DXvessel-outer") ||(lvn=="Log-DXvessel-cap") ||(lvn=="Log-DXcoil") ||(lvn=="Log-DXyoke") ||(lvn=="Log-Bellows") ||(lvn=="Log-Bellows-flange1") ||(lvn=="Log-Bellows-flange2")){
+	//G4cerr << "Logicalvolume " <<(*lvcite)->GetSolid()->GetName() << G4endl;
+	(*lvcite)->SetSensitiveDetector(BeamPipeSD);
+      }
+    }
+
+    //BeamPipeSD->SetSensitiveDetector(BeamPipeSD);
+    //G4cout << "BEAMPIPE " << G4endl;
+    RHICfBBCSD* BBCSD = new RHICfBBCSD("BBC"); //comment out by satoken
+    SDman->AddNewDetector(BBCSD); //comment out by satoken
   }
+  
+
+
+
   if(flag.check(bRESPONSE_ARM1)) {
     RHICfGSOplateSD* GSOplateSD = new RHICfGSOplateSD("GSOplate");
     GSOplateSD->SetTables(ftables);
@@ -144,8 +172,11 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     RHICfFCSD* FCSD = new RHICfFCSD("FC");
     SDman->AddNewDetector(FCSD);
   }
+
+   //Coment out by satoken 20190514
+  /*
   if(flag.check(bRESPONSE_ZDC)) {
-    RHICfZDCSD* ZDCSD = new RHICfZDCSD("ZDC");
+    ARHICfZDCSD* ZDCSD = new RHICfZDCSD("ZDC");
     ZDCSD->SetTables(ftables);
     SDman->AddNewDetector(ZDCSD);
     const G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
@@ -161,7 +192,8 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
     RHICfScinSD* ScinSD = new RHICfScinSD("Scin");
     SDman->AddNewDetector(ScinSD);
   }
-
+  */
+  
   //////////
   // Retrieve auxiliary information for sensitive detector
   const G4GDMLAuxMapType* auxmap = parser.GetAuxMap();
@@ -174,7 +206,7 @@ G4VPhysicalVolume* RHICfDetectorConstruction::Construct()
 	     << " has the following list of auxiliary information: "
 	     << G4endl << G4endl;
       for(G4GDMLAuxListType::const_iterator vit=(*iter).second.begin(); vit!=(*iter).second.end(); vit++) {
-	G4cout << "--> Type: " << (*vit).type
+      G4cout << "--> Type: " << (*vit).type
 	       << " Value: " << (*vit).value << G4endl;
       }
     }
@@ -504,11 +536,12 @@ void RHICfDetectorConstruction::SetOpticalProperties()
   //  G4VPhysicalVolume* PVworld=parser.GetWorldVolume();
   G4VPhysicalVolume* PVgapf=G4PhysicalVolumeStore::GetInstance()->GetVolume("Vol-gapf_PV");
   G4VPhysicalVolume* PVfibr=G4PhysicalVolumeStore::GetInstance()->GetVolume("Vol-fibr_PV");
-  G4VPhysicalVolume* PVzdc=G4PhysicalVolumeStore::GetInstance()->GetVolume("Vol-zdc_PV");
+  
+  //G4VPhysicalVolume* PVzdc=G4PhysicalVolumeStore::GetInstance()->GetVolume("Vol-zdc_PV"); // comment out by satoken 20190514
   new G4LogicalBorderSurface("surface1In",  PVfibr, PVgapf, fOpsurface1);
   new G4LogicalBorderSurface("surface1Out", PVgapf, PVfibr, fOpsurface1);
-  new G4LogicalBorderSurface("surface2In",  PVfibr, PVzdc, fOpsurface2);
-  new G4LogicalBorderSurface("surface2Out", PVzdc, PVfibr, fOpsurface2);
+  //new G4LogicalBorderSurface("surface2In",  PVfibr, PVzdc, fOpsurface2); // comment out by satoken20190514
+  //new G4LogicalBorderSurface("surface2Out", PVzdc, PVfibr, fOpsurface2); // comment out by satoken20190514
   /*
   new G4LogicalBorderSurface("surfaceOut1_1", fPMT_1Physical, fGAPF_1Physical, fOpsurface);
   new G4LogicalBorderSurface("surfaceIn1_1",  fGAPF_1Physical, fPMT_1Physical, fOpsurface);

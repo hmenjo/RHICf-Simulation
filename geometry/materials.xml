@@ -5,6 +5,10 @@
   <!-- *** Materials *** -->
   <!-- ***************** -->
   <materials>
+    <element Z="1" name="Vaccume">
+      <atom unit="g/mole" value="1.008"/>
+    </element>
+
     <element Z="1" name="H">
       <atom unit="g/mole" value="1.00794"/>
     </element>
@@ -44,6 +48,11 @@
     </material>
 
     <material Z="1" name="Galactic" state="gas">
+      <D unit="g/cm3" value="1.e-25"/>
+      <atom unit="g/mole" value="1.01"/>
+    </material>
+    
+    <material Z="1" name="Galactic2" state="gas">
       <D unit="g/cm3" value="1.e-25"/>
       <atom unit="g/mole" value="1.01"/>
     </material>

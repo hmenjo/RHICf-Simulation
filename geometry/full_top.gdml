@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE gdml [ 
-<!ENTITY gwd>
+<!ENTITY gwd "/ccj/u/RHICf/rhicf10/geometry/">
 <!ENTITY materials SYSTEM "materials.xml">
 ]>
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GDML_3_1_4/schema/gdml.xsd">
@@ -9,7 +9,7 @@
   <!-- *** Positions and Rotations *** -->
   <!-- ******************************* -->
   <define>
-    <variable name="LHCfy" value="2.40"/>
+    <variable name="LHCfy" value="2.4"/>
     <variable name="LHCfz" value="1783"/>
     <variable name="ZDCz"  value="1811"/>
 

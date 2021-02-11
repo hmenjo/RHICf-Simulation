@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "RHICfGSObarHit.hh"
-#include "RHICfParam.hpp"
+#include "../../lib/RHICfParam.hpp"
 
 class G4Step;
 class G4HCofThisEvent;

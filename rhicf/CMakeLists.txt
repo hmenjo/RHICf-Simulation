@@ -39,8 +39,6 @@ file(GLOB hepmc ${HEPMC_LIBRARY}/libHepMC.so)
 
 #----------------------------------------------------------------------------
 # Find BOOST
-set(Boost_NO_SYSTEM_PATHS ON)
-set (BOOST_ROOT $ENV{BOOST_ROOT})
 set (BOOST_INCLUDEDIR $ENV{BOOST_INCLUDE})
 set (BOOST_LIBRARYDIR $ENV{BOOST_LIBRARY})
 set (Boost_NO_SYSTEM_PATHS ON)
@@ -48,9 +46,7 @@ set (Boost_USE_MULTITHREADED ON)
 set (Boost_USE_STATIC_LIBS ON)
 set (Boost_USE_STATIC_RUNTIME OFF)
 set (BOOST_ALL_DYN_LINK OFF)
-message(STATUS "${BOOST_ROOT} ${Boost_VERSION}")
-
-find_package (Boost 1.61 COMPONENTS system filesystem timer random program_options)
+find_package (Boost REQUIRED COMPONENTS system filesystem timer random program_options)
 if(NOT Boost_FOUND)
   message(STATUS "RHICF: BOOST package not found. --> rhicf disabled")
   return()

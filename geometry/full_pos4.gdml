@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE gdml [ 
-<!ENTITY gwd>
+<!ENTITY gwd "/ccj/u/RHICf/rhicf10/geometry/">
 <!ENTITY materials SYSTEM "materials.xml">
 ]>
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GDML_3_1_4/schema/gdml.xsd">
@@ -40,7 +40,7 @@
 	<positionref ref="Pos-world"/>
       </physvol>
       <physvol>
-        <file name="&gwd;arm1.gdml"/>
+        <file name="&gwd;arm1-fc.gdml"/>
 	<positionref ref="Pos-LHCf"/>
       </physvol>
       <physvol>

@@ -10,8 +10,8 @@
 #include "TMatrixD.h"
 #include "Minuit2/FCNBase.h"
 
-#include "RHICfSimEvent.hpp"
-#include "RunInfo.hpp"
+#include "../../lib/RHICfSimEvent.hpp"
+#include "../../lib/RunInfo.hpp"
 
 #define STATIC_CHECK(expr) { char unnamed[(expr) ? 1 : 0]; }
 

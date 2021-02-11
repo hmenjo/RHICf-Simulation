@@ -10,8 +10,8 @@
 #include "TFile.h"
 #include "TTree.h"
 
-#include "RunInfo.hpp"
-#include "RHICfSimEvent.hpp"
+#include "../../lib/RunInfo.hpp"
+#include "../../lib/RHICfSimEvent.hpp"
 
 #include "RHICfDetectorConstruction.hh"
 

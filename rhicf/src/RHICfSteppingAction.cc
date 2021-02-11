@@ -16,6 +16,7 @@
 #include "RHICfSteppingAction.hh"
 #include "RHICfTrackInformation.hh"
 #include "RHICfBBCSD.hh"
+#include "RHICfBEAMPIPESD.hh"
 
 #include <fstream>
 #include <iomanip>
@@ -37,12 +38,15 @@ RHICfSteppingAction::~RHICfSteppingAction()
 void RHICfSteppingAction::UserSteppingAction(const G4Step* astep)
 {
 #ifdef DUMPTRACK
+  G4cerr << "RHICfUserSteppingAction " << G4endl;
   G4Track* track=astep->GetTrack();
   G4StepPoint* preStep=astep->GetPreStepPoint();
   G4VPhysicalVolume* prePV=preStep->GetPhysicalVolume();
   G4StepPoint* postStep=astep->GetPostStepPoint();
   G4VPhysicalVolume* postPV=postStep->GetPhysicalVolume();
 
+  
+  
   std::ofstream of("steps.log", std::ios::out | std::ios::app );
 
   of << track->GetTrackID() << " "

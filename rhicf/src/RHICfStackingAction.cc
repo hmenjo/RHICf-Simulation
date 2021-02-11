@@ -19,6 +19,7 @@ RHICfStackingAction::~RHICfStackingAction()
 G4ClassificationOfNewTrack
 RHICfStackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
+  //G4cerr << "ClassifyNewTrack " << G4endl;
   if(0) {
     /// Particle is secondary
     if(aTrack->GetParentID() > 0) {
