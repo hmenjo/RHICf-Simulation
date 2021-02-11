@@ -1,4 +1,23 @@
 ***********************************************
+***  RHICf Simulation "Fast" version (v11)  ***
+***********************************************
+
+This is fast version of RHICf detector simulation developed by Satoken in 2020.
+The CPU time for detector simulation of full configuration is dramatically reduced by intorducing followings;
+- Changed the material beampipes (except the Y chamber in the front of RHICf detector) and BBC to vaccume.  
+- Kill the particles arrived at the beampipes. 
+- Removed ZDC
+
+To use the fast version, please use one of the geometry files:
+- full_ts_woZDC_adhoc_pipe.gdml
+- full_tl_woZDC_adhoc_pipe.gdml
+- full_top_woZDC_adhoc_pipe.gdml
+
+Note) Even you use the other geometry files, the simulation is not compatible with the normal version 
+      because ZDC sensitive detectors are removed and particles arriving at the beampile are killed. 
+
+Below are from the original README file 
+***********************************************
 *** How to use RHICf Geant4 simulation tool ***
 ***                     created: 2016/08/25 ***
 ***********************************************
