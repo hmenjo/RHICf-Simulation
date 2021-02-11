@@ -9,8 +9,8 @@
 #include "TFile.h"
 #include "TTree.h"
 
-#include "../../lib/RHICfSimEvent.hpp"
-#include "../../lib/Flag.hpp"
+#include "RHICfSimEvent.hpp"
+#include "Flag.hpp"
 
 class G4Event;
 class G4VPrimaryGenerator;

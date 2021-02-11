@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "RHICfScinHit.hh"
-#include "../../lib/RHICfParam.hpp"
+#include "RHICfParam.hpp"
 
 class G4Step;
 class G4HCofThisEvent;

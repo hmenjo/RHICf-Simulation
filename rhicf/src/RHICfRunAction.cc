@@ -22,15 +22,12 @@
 #include "RHICfRunAction.hh"
 #include "RHICfPrimaryGeneratorAction.hh"
 #include "HepMCG4AsciiReader.hh"
-#include "G4Timer.hh"
-#include "G4Types.hh"
 
 using boost::lexical_cast;
 typedef boost::char_separator< char > separator;
 typedef boost::tokenizer< separator >::iterator iterator;
 namespace pt=boost::posix_time;
 namespace rn=boost::random;
-
 using namespace Pythia8;
 RHICfRunAction::RHICfRunAction(RHICfDetectorConstruction* det):G4UserRunAction(), fTimer(0), fDetector(det)
 {
@@ -46,29 +43,16 @@ RHICfRunAction::~RHICfRunAction()
 
 void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  //G4cerr << "BeginOfRunAction " << G4endl;
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  double time[20];
-  /// Timer start
-  fTimer = new G4Timer();
-  fTimer->Start();
 
-  G4Timer* timer1 = new G4Timer();
-  G4double fElapsedTime1;
-  timer1->Start();
-  
+  /// Timer start
+  fTimer=new G4Timer();
+  fTimer->Start();
+  fElapsedTime=0.;
+
   G4RunManager* runManager = G4RunManager::GetRunManager();
   RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
   flag_detector=fDetector->GetDetectorFlag();
-  
-  timer1->Stop();
-  fElapsedTime1+=timer1->GetRealElapsed();
-  G4cout << "Time RunManager: " << fElapsedTime1 << " sec." << G4endl;
-
-  G4Timer* timer2 = new G4Timer();
-  G4double fElapsedTime2;
-  timer2->Start();
-
 
   if(flag_detector.check(bGENERATE)) {
     std::stringstream srun;
@@ -357,26 +341,21 @@ void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
       }
       sigTot=sigEla+sigIne;
     }
-        
-    genAction->SetGenerator("Generate");
-    HepMCG4AsciiReader* hepMC=dynamic_cast<HepMCG4AsciiReader*>(genAction->GetGenerator());
-    hepMC->SetFileName(ftmp);
-    hepMC->Initialize();
+
+    if(genname=="Single") {
+      genAction->SetGenerator("Single");
+    }else{
+      genAction->SetGenerator("Generate");
+      HepMCG4AsciiReader* hepMC=dynamic_cast<HepMCG4AsciiReader*>(genAction->GetGenerator());
+      hepMC->SetFileName(ftmp);
+      hepMC->Initialize();
+    }
 
     flag_merged=flag_detector;
   }
-  timer2->Stop();
-  fElapsedTime2+=timer2->GetRealElapsed();
-  G4cout << "Time GenerateEvent: " << fElapsedTime2 << " sec." << G4endl;
-
-  G4Timer* timer3 = new G4Timer();
-  G4double fElapsedTime3;
-  timer3->Start();
-
   runInfo=new RunInfo();
   simEvent=new RHICfSimEvent();
-  
-  
+
   /// Define ROOT File and TTree
   std::string froot=fdir;
   fout=new TFile(froot.c_str(), "recreate");
@@ -398,15 +377,6 @@ void RHICfRunAction::BeginOfRunAction(const G4Run* aRun)
   runInfo->SetSigEla(sigEla);
   runInfo->SetSigIne(sigIne);
   ///
-  timer3->Stop();
-  fElapsedTime3+=timer3->GetRealElapsed();
-  G4cout << "Time ConserveFile: " << fElapsedTime3 << " sec." << G4endl;
-  G4cerr << " " << G4endl;
-  G4cerr << "RHICfRunAction     " << G4endl;
-  G4cerr << "Time RunManager:   " << fElapsedTime1 << " sec." << G4endl;
-  G4cerr << "Time EventGenerate:" << fElapsedTime2 << " sec." << G4endl;
-  G4cerr << "Time ConserveFile: " << fElapsedTime3 << " sec." << G4endl;
-
 
   if(1) {
     G4cout << "Input options check1" << G4endl;

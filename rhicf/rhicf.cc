@@ -11,7 +11,6 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/program_options.hpp>
-#include <time.h> 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -26,9 +25,7 @@
 #include "RHICfSteppingAction.hh"
 #include "RHICfStackingAction.hh"
 #include "RHICfReconstruction.hh"
-#include "../lib/RHICfParam.hpp"
-#include <G4Timer.hh>
-
+#include "RHICfParam.hpp"
 
 #undef G4VIS_USE
 
@@ -60,12 +57,10 @@ typedef boost::char_separator< char > separator;
 typedef boost::tokenizer< separator >::iterator iterator;
 
 
-
 FLAGS GetFlag(G4String flagString);
 
 int main(int argc,char** argv)
 {
-  
   if(argc==1) {
     G4cout << "No input file!" << G4endl;
     return 1;
@@ -74,9 +69,6 @@ int main(int argc,char** argv)
   ifstream inputs(argv[1]);
   if(inputs.fail()) assert(!"ERROR: input.dat does not exist.");
 
-  
-  
-  
   /// Set options
   options_description opt_common("Common for all mode");
   opt_common.add_options()
@@ -119,7 +111,6 @@ int main(int argc,char** argv)
     .add(opt4)
     .add(opt5)
     .add(opt6);
-  
 
   variables_map vm;
   try{
@@ -130,21 +121,12 @@ int main(int argc,char** argv)
     G4cout << ex.what() << G4endl;
     exit(1);
   }
-  
-  
-  
-
-  G4Timer* ftimer1 = new G4Timer();
-  G4double ffElapsedTime1;
-  ftimer1->Start();
-  
-  
 
   /// Reconstruction mode: reconstruct and exit
   std::string reco=vm["RECONSTRUCT"].as<std::string>();
   if(reco=="TRUE") {
     G4cout << "Reconstruction mode" << G4endl;
-    
+
     /// Set output
     fs::path foutput;
     foutput=vm["OUTPUTFILE"].as<fs::path>();
@@ -157,7 +139,7 @@ int main(int argc,char** argv)
 	G4Exception("rhicf","Invalid Directory",FatalException,mes.c_str());
       }
     }
-   
+
     /// Set input
     fs::path finput;
     finput=vm["INPUTFILE"].as<fs::path>();
@@ -197,7 +179,7 @@ int main(int argc,char** argv)
     RHICfSimEvent* simEvent_out=new RHICfSimEvent();
     tevent_out->Branch("SimEvent", &simEvent_out);
     RHICfReconstruction* reconstruction=new RHICfReconstruction(new TFile(finput.string().c_str()),fout,ftables);
-    
+
     trun_out->Print();
     tevent_out->Print();
 
@@ -215,15 +197,7 @@ int main(int argc,char** argv)
     G4Exception("rhicf","Invalid opttion",FatalException,"RECONSTRUCT option: choose TRUE or FALSE");
   }
 
-  ftimer1->Stop();
-  ffElapsedTime1+=ftimer1->GetRealElapsed();
-  G4cout << "Time SetOption: " << ffElapsedTime1 << " sec." << G4endl;
 
-  G4Timer* ftimer2 = new G4Timer();
-  G4double ffElapsedTime2;
-  ftimer2->Start();
-
-  
   /// Check common parameters
   std::string mode;
   fs::path fgeometry;
@@ -254,7 +228,7 @@ int main(int argc,char** argv)
     std::string mes="File "+ (fgeometry.parent_path()/"GeometryFiles.dat").string() +" does not exist.";
     G4Exception("rhicf","Invalid File",FatalException,mes.c_str());
   }
-  
+
   bool findmode=false;
   std::string line;
   std::string fdetector;
@@ -309,14 +283,7 @@ int main(int argc,char** argv)
     }
   }
 
-  ftimer2->Stop();
-  ffElapsedTime2+=ftimer2->GetRealElapsed();
-  G4cout << "Time SetTable: " << ffElapsedTime2 << " sec." << G4endl;
 
-  G4Timer* ftimer3 = new G4Timer();
-  G4double ffElapsedTime3;
-  ftimer3->Start();
-  
   // Construct the default run manager
   G4RunManager* runManager=new G4RunManager;
 
@@ -338,8 +305,6 @@ int main(int argc,char** argv)
   runManager->SetUserAction(stepAction);
   G4UserStackingAction* stackAction=new RHICfStackingAction();
   runManager->SetUserAction(stackAction);
-  
-  
 
   TFile *fin;
   fs::path finput;
@@ -382,15 +347,6 @@ int main(int argc,char** argv)
       }
     }
   }
-  
-  ftimer3->Stop();
-  ffElapsedTime3+=ftimer3->GetRealElapsed();
-  G4cout << "Time RunManager+GeneSeed: " << ffElapsedTime3 << " sec." << G4endl;
-
-  G4Timer* ftimer4 = new G4Timer();
-  G4double ffElapsedTime4;
-  ftimer4->Start();
-
 
   /// Set rapidity cut
   double etacut;
@@ -425,7 +381,6 @@ int main(int argc,char** argv)
    /// Convert the starting seed to integer and feed it to the random engine
     G4Random::setTheSeed(seed1);
   }
-  
 
   fs::path fcrmc;
   if(flag.check(bGENERATE)) {
@@ -445,14 +400,6 @@ int main(int argc,char** argv)
     }
   }
 
-  ftimer4->Stop();
-  ffElapsedTime4+=ftimer4->GetRealElapsed();
-  G4cout << "Time RapidityCut+SetSeed: " << ffElapsedTime4 << " sec." << G4endl;
-
-  G4Timer* ftimer5 = new G4Timer();
-  G4double ffElapsedTime5;
-  ftimer5->Start();
-  
   std::string bParticle;
   double bEnergy;
   std::string bPosition;
@@ -461,6 +408,13 @@ int main(int argc,char** argv)
     bEnergy=vm["EBEAM"].as<double>();
     bPosition=vm["PBEAM"].as<std::string>();
     seed2=0;
+  }else if(fmodel=="Single") {
+    bParticle=vm["BEAM"].as<std::string>();
+    bEnergy=vm["EBEAM"].as<double>();
+    bPosition=vm["PBEAM"].as<std::string>();
+    seed2=0;
+    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetGenerator("Single");
+    dynamic_cast<RHICfPrimaryGeneratorAction*>(genAction)->SetBeam(bParticle,bEnergy*CLHEP::GeV,bPosition,DetPosition);
   }
 
   detector->SetGeometry(fgeometry.string(),fdetector,flag);
@@ -471,7 +425,6 @@ int main(int argc,char** argv)
   dynamic_cast<RHICfRunAction*>(runAction)->SetNevent(nevent);
   dynamic_cast<RHICfRunAction*>(runAction)->SetRunNumber(nrun);
   dynamic_cast<RHICfRunAction*>(runAction)->SetModel(fmodel);
-  dynamic_cast<RHICfRunAction*>(runAction)->SetCrossSection(sigTot,sigEla,sigIne);
   dynamic_cast<RHICfRunAction*>(runAction)->SetCrossSection(sigTot,sigEla,sigIne);
   dynamic_cast<RHICfRunAction*>(runAction)->SetOutput(foutput.string());
  if(flag.check(bBEAMTEST)) {
@@ -494,23 +447,6 @@ int main(int argc,char** argv)
     G4Exception("rhicf","Invalid flag",FatalException,"Not available.");
   }
 
- ftimer5->Stop();
- ffElapsedTime5+=ftimer5->GetRealElapsed();
- G4cout << "Time GetAction: " << ffElapsedTime5 << " sec." << G4endl;
-
- G4cerr << G4endl;
- G4cerr << "rhicf.cc" << G4endl;
- G4cerr << "Time SetOption:          " << ffElapsedTime1 << " sec." << G4endl;
- G4cerr << "Time SetTable            " << ffElapsedTime2 << " sec." << G4endl;
- G4cerr << "Time RunManager+SetSeed  " << ffElapsedTime3 << " sec." << G4endl;
- G4cerr << "Time RapidityCut+SetSeed " << ffElapsedTime4 << " sec." << G4endl;
- G4cerr << "Time GetAction           " << ffElapsedTime5 << " sec." << G4endl;
-
- G4Timer* ftimer6 = new G4Timer();
- G4double ffElapsedTime6;
- ftimer6->Start();
-
-
   // Initialize G4 kernel
   runManager->Initialize();
 
@@ -532,23 +468,14 @@ int main(int argc,char** argv)
     session = new G4UIterminal();
 #endif
     session->SessionStart();
-    
-    ftimer6->Stop();
-    ffElapsedTime6+=ftimer6->GetRealElapsed();
-    G4cout << "Geant4 Initialize: " << ffElapsedTime6 << " sec." << G4endl;
     delete session;
   }else{
     std::stringstream sevent;
     sevent<<nevent;
     UI->ApplyCommand("/run/beamOn "+sevent.str());
-    
-    ftimer6->Stop();
-    ffElapsedTime6+=ftimer6->GetRealElapsed();
-    G4cout << "Geant4 Initialize: " << ffElapsedTime6 << " sec." << G4endl;
     return 0;
   }
-  
-      
+
   return 0;
 }
 

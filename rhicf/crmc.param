@@ -37,20 +37,20 @@ nodecay  220   !no eta decay
 
 MinDecayLength  .1    !minimum c.Tau to define stable particles (cm)
 
-fdpmjetpho dat   /opt/software_rhicf/crmc.v1.6.0.r5324-build/tabs/phojet_fitpar.dat
-fdpmjet dat   /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/dpmjet.dat
-fqgsjet dat   /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/qgsjet.dat
-fqgsjet ncs   /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/qgsjet.ncs
-fqgsjetII03 dat /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/qgsdat-II-03.lzma
-fqgsjetII03 ncs /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/sectnu-II-03
-fqgsjetII dat /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/qgsdat-II-04.lzma
-fqgsjetII ncs /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/sectnu-II-04
+fdpmjetpho dat   CRMCDIR/tabs/phojet_fitpar.dat
+fdpmjet dat   CRMCDIR/tabs/dpmjet.dat
+fqgsjet dat   CRMCDIR/tabs/qgsjet.dat
+fqgsjet ncs   CRMCDIR/tabs/qgsjet.ncs
+fqgsjetII03 dat CRMCDIR/tabs/qgsdat-II-03.lzma
+fqgsjetII03 ncs CRMCDIR/tabs/sectnu-II-03
+fqgsjetII dat CRMCDIR/tabs/qgsdat-II-04.lzma
+fqgsjetII ncs CRMCDIR/tabs/sectnu-II-04
 fname check  none
-fname initl  /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/epos.initl
-fname iniev  /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/epos.iniev
-fname inirj  /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/epos.inirj
-fname inics  /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/epos.inics
-fname inihy  /ccj/w/r01/RHICf/linux5/opt/crmc.v1.6.0/tabs/epos.inihy
+fname initl  CRMCDIR/tabs/epos.initl
+fname iniev  CRMCDIR/tabs/epos.iniev
+fname inirj  CRMCDIR/tabs/epos.inirj
+fname inics  CRMCDIR/tabs/epos.inics
+fname inihy  CRMCDIR/tabs/epos.inihy
 
 set pytune 350   !possibility to change PYTHIA tune (for PYTHIA only !)
 

@@ -54,8 +54,6 @@ void RHICfEventAction::BeginOfEventAction(const G4Event* evt)
 /// EndOfEventAction
 void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 {
-  //G4cerr << "EndOfEventAction " << G4endl;
-
   G4HCofThisEvent* HCTE=evt->GetHCofThisEvent();
   if(!HCTE) return;
 
@@ -177,10 +175,9 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
     }
 
     /// BBC
-    
     BBCContainer* bbcCont=new BBCContainer();
     bbcCont->Reset();
-    
+
     static G4int idbbc=-1;
     if(idbbc<0) idbbc=SDManager->GetCollectionID("BBC");
     BBCHitsCollection* BBCHC=(BBCHitsCollection*)HCTE->GetHC(idbbc);
@@ -194,15 +191,13 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
       bbcCont->SetBBC(iside, ibbc, bbc);
     }
     simEvent->SetBBC(bbcCont);
-    
+
     if(!flag.check(bGENERATE)) {
       RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
       simEvent->SetCentral(genAction->GetCentral());
     }
-    
   }
-  
-  
+
   /// BeamTest (Beam information)
   if(flag.check(bBEAMTEST)) {
     RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
@@ -217,15 +212,11 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 
   bool phit=false;
 
-  // ZDC
-   // comment out by satoken20190514
-  
-  
-  /*
-  if(flag.check(bRESPONSE_ZDC)){
+  /// ZDC
+  if(flag.check(bRESPONSE_ZDC)) {
     ZDCContainer* zdcCont=new ZDCContainer();
     zdcCont->Reset();
-    
+
     static G4int idzdc=-1;
     if(idzdc<0) idzdc=SDManager->GetCollectionID("ZDC");
     ZDCHitsCollection* ZDCHC=(ZDCHitsCollection*)HCTE->GetHC(idzdc);
@@ -236,6 +227,7 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 			  (*ZDCHC)[i]->GetNphoton());
       if((*ZDCHC)[i]->GetEdep()>0) phit=true;
     }
+
     static G4int idsmd=-1;
     if(idsmd<0) idsmd=SDManager->GetCollectionID("SMD");
     SMDHitsCollection* SMDHC=(SMDHitsCollection*)HCTE->GetHC(idsmd);
@@ -244,7 +236,7 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
 		      (*SMDHC)[i]->GetSMD(),
 		      (*SMDHC)[i]->GetEdep());
     }
-    
+
     static G4int idscin=-1;
     if(idscin<0) idscin=SDManager->GetCollectionID("Scin");
     ScinHitsCollection* ScinHC=(ScinHitsCollection*)HCTE->GetHC(idscin);
@@ -252,30 +244,28 @@ void RHICfEventAction::EndOfEventAction(const G4Event* evt)
       zdcCont->SetScin((*ScinHC)[i]->GetScin(),
 		       (*ScinHC)[i]->GetEdep());
     }
-    
-    simEvent->SetZDC(zdcCont);
-    }
-  */ 
 
-  if(!flag.check(bTRANSPORT) && !flag.check(bBEAMTEST)) {
-    RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
-    simEvent->SetCentral(genAction->GetCentral());
-    simEvent->SetForward(genAction->GetForward());
-    simEvent->SetBBC(genAction->GetBBC());
+    simEvent->SetZDC(zdcCont);
+
+    if(!flag.check(bTRANSPORT) && !flag.check(bBEAMTEST)) {
+      RHICfPrimaryGeneratorAction* genAction=(RHICfPrimaryGeneratorAction*)runManager->GetUserPrimaryGeneratorAction();
+      simEvent->SetCentral(genAction->GetCentral());
+      simEvent->SetForward(genAction->GetForward());
+      simEvent->SetBBC(genAction->GetBBC());
+    }
   }
-  
-  
+
   /// LHCf data
-if(flag.check(bRESPONSE_ARM1)) {
-  MCDataContainer* mcdataCont=new MCDataContainer();
-  mcdataCont->Reset();
-  
-  static G4int idplate=-1;
-  if(idplate<0) idplate=SDManager->GetCollectionID("GSOplate");
-  GSOplateHitsCollection* GSOplateHC=(GSOplateHitsCollection*)HCTE->GetHC(idplate);
-  for(unsigned int i=0; i<GSOplateHC->GetSize(); i++) {
-    mcdataCont->SetPlate((*GSOplateHC)[i]->GetTower(),
-			 (*GSOplateHC)[i]->GetPlate(),
+  if(flag.check(bRESPONSE_ARM1)) {
+    MCDataContainer* mcdataCont=new MCDataContainer();
+    mcdataCont->Reset();
+
+    static G4int idplate=-1;
+    if(idplate<0) idplate=SDManager->GetCollectionID("GSOplate");
+    GSOplateHitsCollection* GSOplateHC=(GSOplateHitsCollection*)HCTE->GetHC(idplate);
+    for(unsigned int i=0; i<GSOplateHC->GetSize(); i++) {
+      mcdataCont->SetPlate((*GSOplateHC)[i]->GetTower(),
+			   (*GSOplateHC)[i]->GetPlate(),
 			   (*GSOplateHC)[i]->GetEdep());
       //      mcdataCont->SetPlateTruth((*GSOplateHC)[i]->GetTower(),
       //				(*GSOplateHC)[i]->GetPlate(),
@@ -305,7 +295,7 @@ if(flag.check(bRESPONSE_ARM1)) {
 	       << (*GSObarHC)[i]->GetXY() << " "
 	       << (*GSObarHC)[i]->GetBar() << " "
 	       << (*GSObarHC)[i]->GetEdep() << " "
-	       << (*GSObarHC)[i]->GetEdep_truth() << " "
+	  //	       << (*GSObarHC)[i]->GetEdep_truth() << " "
 	       << G4endl;
     }
 

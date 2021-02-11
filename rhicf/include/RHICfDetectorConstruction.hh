@@ -5,7 +5,7 @@
 #include "G4GDMLParser.hh"
 #include "globals.hh"
 
-#include "../../lib/RHICfParam.hpp"
+#include "RHICfParam.hpp"
 
 class G4Box;
 class G4LogicalVolume;

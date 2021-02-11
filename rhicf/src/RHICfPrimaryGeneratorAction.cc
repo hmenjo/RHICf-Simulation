@@ -29,6 +29,7 @@ RHICfPrimaryGeneratorAction::RHICfPrimaryGeneratorAction()
   gentypeMap["Transport"] = particleGun;
   gentypeMap["Response"]  = particleGun;
   gentypeMap["BeamTest"]  = particleGun;
+  gentypeMap["Single"]    = particleGun;
 
   messenger= new RHICfPrimaryGeneratorMessenger(this);
 }
@@ -41,7 +42,6 @@ RHICfPrimaryGeneratorAction::~RHICfPrimaryGeneratorAction()
 
 void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //G4cerr << "RHICfPrimaryGeneratorAction " << G4endl;
   G4RunManager* runManager = G4RunManager::GetRunManager();
 
   if(currentGenerator) {
@@ -177,12 +177,41 @@ void RHICfPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }else if(currentGeneratorName=="Generate") {
       currentGenerator->GeneratePrimaryVertex(anEvent);
       gprocess=dynamic_cast<HepMCG4AsciiReader*>(currentGenerator)->GetProcess();
+    }else if(currentGeneratorName=="Single") {
+      G4ParticleTable* bTable=G4ParticleTable::GetParticleTable();
+      G4ParticleDefinition* beam=bTable->FindParticle(bParticle);
+      G4ThreeVector position;
+      G4ThreeVector direction;
+
+      position=G4ThreeVector(0.,0.,0.);
+ 
+      /// Get time in milliseconds
+      pt::ptime date_ms=pt::microsec_clock::local_time();
+      long ms=date_ms.time_of_day().total_milliseconds();
+
+      gRandom->SetSeed(ms);
+      G4double xx=gRandom->Uniform(-55,55);
+      G4double yy=gRandom->Uniform(-70,150);
+
+      while(!CheckHit(xx,yy,bPosition)) {
+	xx=gRandom->Uniform(-55,55);
+	yy=gRandom->Uniform(-70,150);
+      }
+
+      direction=G4ThreeVector(xx,yy,17780);
+
+      particleGun=new G4ParticleGun(1);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleDefinition(beam);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticlePosition(position);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleMomentumDirection(direction);
+      dynamic_cast<G4ParticleGun*>(particleGun)->SetParticleEnergy(bEnergy);
+
+      particleGun->GeneratePrimaryVertex(anEvent);
     }
   }else
     G4Exception("RHICfPrimaryGeneratorAction::GeneratePrimaries",
                 "PrimaryGeneratorAction", FatalException,
                 "generator is not instanciated." );
-  //G4cerr << "End of RHICfPrimaryGeneratorAction" << G4endl;
 }
 
 
@@ -221,6 +250,10 @@ bool RHICfPrimaryGeneratorAction::CheckHit(G4double x, G4double y, G4String phit
   else if(phit=="ZDC")   { hit=2; }
   else if(phit=="SMALL") { hit=0; }
   else if(phit=="LARGE") { hit=1; }
+  else{
+    std::string mes="Select one of the following: UNIFORM(default)/SMALL/LARGE/ZDC.";
+    G4Exception("PrimaryGeneratorAction","Invalid position flag",FatalException,mes.c_str());
+  }
 
   if(hit==0 &&
      y-DetPosition<+x+(10.-edge)*sqrt(2.) &&

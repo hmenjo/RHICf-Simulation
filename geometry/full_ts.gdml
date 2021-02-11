@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE gdml [ 
-<!ENTITY gwd "/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/">
+<!ENTITY gwd>
 <!ENTITY materials SYSTEM "materials.xml">
 ]>
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GDML_3_1_4/schema/gdml.xsd">
@@ -10,12 +10,12 @@
   <!-- ******************************* -->
   <define>
     <variable name="LHCfy" value="0"/>
-    <variable name="LHCfz" value="1778"/>
-    <variable name="ZDCz"  value="1808"/>
+    <variable name="LHCfz" value="1783"/>
+    <variable name="ZDCz"  value="1811"/>
 
     <position name="Pos-world" unit="cm" x="0" y="0" z="0"/>
     <position name="Pos-LHCf" unit="cm" x="0" y="LHCfy+6.608416+sqrt(2)" z="LHCfz+14"/>
-    <position name="Pos-ZDC" unit="cm" x="0" y="1.162065" z="ZDCz+59.59"/>
+    <position name="Pos-ZDC" unit="cm" x="0" y="1.162065" z="ZDCz+60"/>
   </define>
 
   <!-- the content of the materials.xml file will be included here -->
@@ -35,26 +35,19 @@
     <volume name="Vol-world">
       <materialref ref="Air"/>
       <solidref ref="Log-world"/>
-      <!-- -->
       <physvol>
-        <file name="/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/pipe_star.gdml"/>
+        <file name="&gwd;pipe_star.gdml"/>
 	<positionref ref="Pos-world"/>
       </physvol>
-      <!-- -->
       <physvol>
-        <file name="/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/arm1-fc.gdml"/>
+        <file name="&gwd;arm1-fc.gdml"/>
 	<positionref ref="Pos-LHCf"/>
       </physvol>
-      
-      <physvol>>  
-      <file name="/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/zdc.gdml"/>  
-      <positionref ref="Pos-ZDC"/> 
-      </physvol> 
-      
-
+      <physvol>
+        <file name="&gwd;zdc.gdml"/>
+	<positionref ref="Pos-ZDC"/>
+      </physvol>
     </volume>
-      
-
   </structure>
 
   <setup name="Default" version="1.0">

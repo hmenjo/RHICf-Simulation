@@ -3,7 +3,7 @@
 
 #include "G4UserEventAction.hh"
 
-#include "../../lib/RHICfParam.hpp"
+#include "RHICfParam.hpp"
 
 class G4Event;
 

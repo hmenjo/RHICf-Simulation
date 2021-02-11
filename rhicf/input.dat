@@ -1,61 +1,76 @@
-RECONSTRUCTION = TRUE
-SIMULATION  = BEAMTEST_POS1
-GEOMETRYDIR = _PATH_TO_${RHICFTOP}/geometry_
-TABLESDIR   = _PATH_TO_${RHICFTOP}/tables_
+SIMULATION  = GENERATE
+GEOMETRYDIR = PATH/TO/GEOMETRY
+TABLESDIR   = PATH/TO/TABLES
 NEVENT      = 10
-RUNNUMBER   = 9999999
-OUTPUTFILE  = _SET_AN_OUTPUTFILE_
+RUNNUMBER   = 999999
+OUTPUTFILE  = Run9999999.root
 
-BEAM        = neutron
-EBEAM       = 200
-PBEAM       = ZDC
+CRMCDIR    = PATH/TO/CRMC
+MODEL      = EPOS_LHC
 
 ###################
 # For commment
 ###################
 
 #***** README *****
-# 0. Common options
-# 'SIMULATION'     Refer ${RHICFTOP}/geometry/GeomtryFiles.dat
-#                  1st, 2nd, 3rd and 4th columns correspond to
-#                  'SIMULATION' mode, GDML file, position of the LHCf 
-#                  and simulation flags (Possible FLAGS are written in 
-#                  ${RHICFTOP}/lib/RHICfParam.hpp), respectively
-# 'GEOMETRYDIR'    Directory containing GDML geometry files
-# 'TABLESDIR'      Directory containing tables
-# 'OUTPUTFILE'     Output file (ROOT format)
-# 'NEVENT'         Number of events (Default: 1000)
-# 'RUNNUMBER'      Run number (Default:99999999)
+# 0. Define the directories (full path is favored)
+# CRMCDIR: directory where "crmc" is installed
+# GEOMETRYDIR: directory containing GDML geometry files
+# TABLESDIR: directory containing tables
+# INPUTFILE: input file (it will be read only if needed)
+# OUTPUTFILE: output file (ROOT format)
+# (if the directory does not exist the program will create it automatically)
 #
-# 1. Generate/Full/BeamTest options
-# 'SEED1'          Seed for Geant4 (Default:-1, random)
-#                    range: 0 - 900000000
+# 1. 'SIMULATION' (refer GeomtryFiles.dat) 
+# Select the simulation mode (generation->transportation->detector response)
+# FULL_POS1: full simulation
+# FULL_NOPIPE_POS1: full simulation without beam pipe material
+# FULL_NOARM1: full simulation without LHCf-Arm1 (only ZDC response)
+# GENERATE: run generator and propagate particles in 3cm radius sphere
+# TRANSPORT: transport particles generated in GENERATE process
+# (if no input is found, the program will generate particles)
+# RESPONSE_POS1: detector response of inputs from TRANSPORT process
+# (if no input is found, the program will give you nothing)
+# BEAMTEST_POS1: shoot 1 particle; define the particle and energy
+# Note: you can create your own geometry. Then add the new geometry
+# in 'geometry/GeometryFiles.dat'.
 #
-# 2. Generate/Full options
-# 'CRMCDIR'        Directory where "crmc" is installed
-# 'MODEL'          Select a model. Possible models are the following
-#                  EPOS_LHC, EPOS_1.99, QGSJETII-04, QGSJETII-03,
-#                  DPMJet3.0-6, Pythia8.215
-# 'SEED2'          Seed for generators (Default:-1, random)
-#                    range   CRMC:    0 - 1000000000
-#                            Pythia8: 1 - 900000000
-# 3. Transport/Full options
-# 'ETACUT'         Rapidity cut for generated particles (Default: 4.8)
-# 'ECUT'           Energy cut in GeV for generated particles (Default: 0.5)
-# 'OPPOSITE'       Simulate eta<0 region if TRUE (Default: FALSE)
+# 2. 'MODEL'
+# You can select from the following:
+# EPOS_LHC, EPOS_1.99,
+# QGSJETII-04, QGSJETII-03,
+# DPMJet3.0-6, Pythia8.215
 #
-# 4. Transport/Response options
-# 'INPUTFILE'      Input file
+# 3. 'NEVENT' (Default: 1000)
+# Set number of event per run
 #
-# 5. BeamTest options
-# 'BEAM'           Set particle name according to Geant4 (Default:geantino)
-#                  (ex: proton, neutron, gamma, e-, e+, mu-, etc)
-# 'EBEAM'          Beam energy in GeV (Default:100)
-# 'PBEAM'          Injection position (Default:UNIFORM)
-#                    possible options
-#                     SMALL:   uniformly in the small tower
-#                     LARGE:   uniformly in the large tower
-#                     ZDC:     uniformly in the ZDC
-#                     UNIFORM: uniformly in wider range than 'ZDC'
+# 4. 'RUNNUMBER' (Default:99999999)
+# Set Run number. This will create "RunXXXXXXX.root"(Use only integer).
+# If not define, This will create "Run.root" file.
+#
+# 5. 'SEED1' (Default:-1)
+# Set seed numbner for geant4
+# range: 0 - 900000000
+# If this is not define, the program will generate a seed number by itself
+#
+# 6. 'SEED2' (Default:-1)
+# Set seed numbner for generators
+# CRMC:    0 - 1000000000
+# Pythia8: 1 - 900000000
+# If this is not define, the program will generate a seed number by itself
+#
+# <For BEAMTEST options>
+# 7. 'BEAM' (Default:geantino)
+# particle name (ex: proton, neutron, gamma, e-, e+, mu-, etc)
+#
+# 8. 'EBEAM'(Default:100)
+# beam energy in GeV
+#
+# 9. 'PBEAM'(Default:UNIFORM)
+# possible options
+# UNIFORM: shoot particle uniformly in wide range
+# SMALL: shoot particle uniformly in the small tower
+# LARGE: shoot particle uniformly in the large tower
+# ZDC: shoot particle uniformly in the ZDC
 #
 #*****  END OF FILE  *****

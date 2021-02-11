@@ -66,8 +66,8 @@ RHICfReconstruction::RHICfReconstruction(TFile* ainput, TFile* aoutput, fs::path
   }
   if((runInfo->GetFlag()).check(bRESPONSE_ARM1))
     tevent->SetBranchAddress("mc", &mcCont);
-  //if((runInfo->GetFlag()).check(bRESPONSE_ZDC))
-  //tevent->SetBranchAddress("zdc", &zdcCont);
+  if((runInfo->GetFlag()).check(bRESPONSE_ZDC))
+    tevent->SetBranchAddress("zdc", &zdcCont);
   if((runInfo->GetFlag()).check(bBEAMTEST))
     tevent->SetBranchAddress("forward", &forwardCont);
 
@@ -90,9 +90,9 @@ RHICfReconstruction::RHICfReconstruction(TFile* ainput, TFile* aoutput, fs::path
     bar_mc=mcCont->GetBar();
     plate_mc=mcCont->GetPlate();
     fc_mc=mcCont->GetFC();
-    //zdc_mc=zdcCont->GetZDC();
-    //nphoton_mc=zdcCont->GetNphoton();
-    //smd_mc=zdcCont->GetSMD();
+    zdc_mc=zdcCont->GetZDC();
+    nphoton_mc=zdcCont->GetNphoton();
+    smd_mc=zdcCont->GetSMD();
 
     reconstruct=new ReconstructContainer();
     reconstruct->Reset();
@@ -163,8 +163,8 @@ RHICfReconstruction::RHICfReconstruction(TFile* ainput, TFile* aoutput, fs::path
 	    reconstruct->SetBar(itower,ibelt,ixy,ibar,bar[itower][ibelt][ixy][ibar]);
     for(int itower=0; itower<ntower; itower++)
       reconstruct->SetFC(itower,fc[itower]);
-    //for(int izdc=0; izdc<nzdc; izdc++) 
-    //reconstruct->SetZDC(izdc,zdc[izdc]);
+    for(int izdc=0; izdc<nzdc; izdc++) 
+      reconstruct->SetZDC(izdc,zdc[izdc]);
     for(int ixy=0; ixy<nxy; ixy++) 
       for(int ismd=0; ismd<nsmd[ixy]; ismd++) 
 	reconstruct->SetSMD(ixy,ismd,smd[ixy][ismd]);
@@ -261,7 +261,10 @@ void RHICfReconstruction::CrossTalk()
 	  TRandom3 p(0),g(0);
 	  double npe=bar_raw[itower][ibelt][ixy][ibar]/mip;
 	  if(npe<20) {
-	    while(npe<0) npe=g.Gaus(p.Poisson(npe),sqrt(npe)*0.3);
+	    while(npe<0) {
+	      npe=p.Poisson(npe);
+	      npe=g.Gaus(npe,sqrt(npe)*0.3);
+	    }
 	  }
 	  bar_raw[itower][ibelt][ixy][ibar]=npe*mip;
 	}
@@ -283,7 +286,8 @@ void RHICfReconstruction::PedestalFluctuation()
       for(int ixy=0; ixy<nxy; ixy++) {
 	for(int ibar=0; ibar<nbar[itower]; ibar++) {
 	  TRandom3 r(0);
-	  bar_raw[itower][ibelt][ixy][ibar]=r.Gaus(bar_raw[itower][ibelt][ixy][ibar],0.5);
+	  double tmp=r.Gaus(bar_raw[itower][ibelt][ixy][ibar],0.2);
+	  bar_raw[itower][ibelt][ixy][ibar]=tmp;
 	}
       }
     }
@@ -291,10 +295,10 @@ void RHICfReconstruction::PedestalFluctuation()
     fc[itower]=r.Gaus(fc_mc[itower],0.1);
   }
 
-  //for(int izdc=0; izdc<nzdc; izdc++) {
-  //TRandom3 r(0);
-  //zdc.push_back(r.Gaus(nphoton_mc[izdc],20));
-  //}
+  for(int izdc=0; izdc<nzdc; izdc++) {
+    TRandom3 r(0);
+    zdc.push_back(r.Gaus(nphoton_mc[izdc],20));
+  }
   for(int ixy=0; ixy<nxy; ixy++) {
     for(int ismd=0; ismd<nsmd[ixy]; ismd++) {
       TRandom3 r(0);

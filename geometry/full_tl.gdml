@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE gdml [ 
-<!ENTITY gwd "/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/">
+<!ENTITY gwd>
 <!ENTITY materials SYSTEM "materials.xml">
 ]>
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GDML_3_1_4/schema/gdml.xsd">
@@ -36,15 +36,15 @@
       <materialref ref="Air"/>
       <solidref ref="Log-world"/>
       <physvol>
-        <file name="/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/pipe_star.gdml"/>
+        <file name="&gwd;pipe_star.gdml"/>
 	<positionref ref="Pos-world"/>
       </physvol>
       <physvol>
-        <file name="/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/arm1-fc.gdml"/>
+        <file name="&gwd;arm1-fc.gdml"/>
 	<positionref ref="Pos-LHCf"/>
       </physvol>
       <physvol>
-        <file name="/crhome/sato.kenta/RHICf/Analysis/Op2017/workspace/2019/src/simulation/geometry/zdc.gdml"/>
+        <file name="&gwd;zdc.gdml"/>
 	<positionref ref="Pos-ZDC"/>
       </physvol>
     </volume>

@@ -4,10 +4,10 @@
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
-#include "../include/RHICfBBCHit.hh"
+
 #include <iomanip>
 
-
+#include "RHICfBBCHit.hh"
 
 /// allocator
 G4Allocator<RHICfBBCHit> RHICfBBCHitAllocator;
@@ -41,7 +41,7 @@ void RHICfBBCHit::Draw()
 }
 
 //////////
-/// Print
+/// Printc
 void RHICfBBCHit::Print()
 {
 }

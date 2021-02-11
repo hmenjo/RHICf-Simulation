@@ -8,7 +8,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4ios.hh"
 
-#include "../../lib/BBCParticle.hpp"
+#include "BBCParticle.hpp"
 
 class RHICfBBCHit: public G4VHit
 {

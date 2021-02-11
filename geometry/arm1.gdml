@@ -261,8 +261,8 @@
     <position name="Pos-gsobar-holder-top-sub-r" unit="mm" x="+13" y="46.01+30.1*sqrt(2)" z="0"/>
 
     <!-- GSObelt small -->
-    <position name="Pos-gsobelt-small-x" unit="mm" x="0" y="-basey" z="1.1"/>
-    <position name="Pos-gsobelt-small-y" unit="mm" x="0" y="-basey" z="0.1"/>
+    <position name="Pos-gsobelt-small-x" unit="mm" x="0" y="-basey" z="0.1"/>
+    <position name="Pos-gsobelt-small-y" unit="mm" x="0" y="-basey" z="1.1"/>
     <position name="Pos-gsobar-small-00" unit="mm" x="0" y="-9.5" z="0"/>
     <position name="Pos-gsobar-small-01" unit="mm" x="0" y="-8.5" z="0"/>
     <position name="Pos-gsobar-small-02" unit="mm" x="0" y="-7.5" z="0"/>
@@ -285,8 +285,8 @@
     <position name="Pos-gsobar-small-19" unit="mm" x="0" y="+9.5" z="0"/>
 
     <!-- GSObelt large -->
-    <position name="Pos-gsobelt-large-x" unit="mm" x="0" y="30.1*sqrt(2)+5-basey" z="1.1"/>
-    <position name="Pos-gsobelt-large-y" unit="mm" x="0" y="30.1*sqrt(2)+5-basey" z="0.1"/>
+    <position name="Pos-gsobelt-large-x" unit="mm" x="0" y="30.1*sqrt(2)+5-basey" z="0.1"/>
+    <position name="Pos-gsobelt-large-y" unit="mm" x="0" y="30.1*sqrt(2)+5-basey" z="1.1"/>
     <position name="Pos-gsobar-large-00" unit="mm" x="0" y="-19.5" z="0"/>
     <position name="Pos-gsobar-large-01" unit="mm" x="0" y="-18.5" z="0"/>
     <position name="Pos-gsobar-large-02" unit="mm" x="0" y="-17.5" z="0"/>
@@ -1885,22 +1885,22 @@
       <physvol>
         <volumeref ref="Vol-gsobelt-small"/>
         <positionref ref="Pos-gsobelt-small-x"/>
-        <rotationref ref="Rot-315"/>
+        <rotationref ref="Rot-45"/>
       </physvol>
       <physvol>
         <volumeref ref="Vol-gsobelt-small"/>
         <positionref ref="Pos-gsobelt-small-y"/>
-        <rotationref ref="Rot-45"/>
-      </physvol>
-      <physvol>
-        <volumeref ref="Vol-gsobelt-large"/>
-        <positionref ref="Pos-gsobelt-large-x"/>
         <rotationref ref="Rot-315"/>
       </physvol>
       <physvol>
         <volumeref ref="Vol-gsobelt-large"/>
-        <positionref ref="Pos-gsobelt-large-y"/>
+        <positionref ref="Pos-gsobelt-large-x"/>
         <rotationref ref="Rot-45"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Vol-gsobelt-large"/>
+        <positionref ref="Pos-gsobelt-large-y"/>
+        <rotationref ref="Rot-315"/>
       </physvol>
     </volume>
 
